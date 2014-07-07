@@ -67,7 +67,29 @@ body, html, .app {
 .service-types{
     margin-top: 7px;
 }
-
+/* Legend */
+.legend{
+    color: #fff;
+    padding: 6px;
+    margin: 0px -10px;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+.legend.one-month {
+    background-color: #5cb85c;
+    border: 1px solid #4cae4c;
+}
+.legend.nine-month {
+    background-color: #428bca;
+    border: 1px solid #357ebd;
+}
+.legend.no-coverage {
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    text-shadow: none;
+}
 
 /* GENERAL STUFF */
 
