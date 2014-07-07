@@ -1,4 +1,5 @@
-<!-- [![Build Status](https://travis-ci.org/agrc/AGRCJavaScriptProjectBoilerPlate.svg?branch=master)](https://travis-ci.org/agrc/AGRCJavaScriptProjectBoilerPlate) -->
+[![Build Status](https://travis-ci.org/agrc/fiber-verification.svg)](https://travis-ci.org/agrc/fiber-verification)
+
 Broadband Provider Fiber Verification
 ===================================
 
