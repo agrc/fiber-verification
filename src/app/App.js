@@ -116,9 +116,6 @@ define([
                 widget.startup();
             });
 
-            this.printer.on('print-complete', function() {
-                domStyle.set(that.popupBlurb, 'display', 'block');
-            });
 
             this.inherited(arguments);
         },
