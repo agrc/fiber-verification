@@ -17,12 +17,7 @@ define([
     'agrc/widgets/locate/FindAddress',
     'agrc/widgets/locate/MagicZoom',
 
-    'ijit/widgets/layout/SideBarToggler',
-
-    'esri/dijit/Print',
-
     './config',
-    './Identify',
 
 
     'dijit/layout/BorderContainer',
@@ -46,12 +41,8 @@ define([
     FindAddress,
     MagicZoom,
 
-    SideBarToggler,
 
-    Print,
-
-    config,
-    Identify
+    config
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -89,11 +80,6 @@ define([
             this.initMap();
 
             this.childWidgets.push(
-                new SideBarToggler({
-                    sidebar: this.sideBar,
-                    map: this.map,
-                    centerContainer: this.centerContainer
-                }, this.sidebarToggle),
                 new FindAddress({
                     map: this.map,
                     apiKey: config.apiKey
@@ -114,26 +100,7 @@ define([
                     searchField: 'NAME',
                     placeHolder: 'city name...',
                     maxResultsToDisplay: 10
-                }, this.cityNode),
-                this.printer = new Print({
-                    map: this.map,
-                    url: config.exportWebMapUrl,
-                    templates: [{
-                        label: 'Portrait (PDF)',
-                        format: 'PDF',
-                        layout: 'Letter ANSI A Portrait',
-                        options: {
-                            legendLayers: []
-                        }
-                    }, {
-                        label: 'Landscape (PDF)',
-                        format: 'PDF',
-                        layout: 'Letter ANSI A Landscape',
-                        options: {
-                            legendLayers: []
-                        }
-                    }]
-                }, this.printDiv)
+                }, this.cityNode)
             );
 
             this.inherited(arguments);
@@ -171,8 +138,7 @@ define([
                     map: this.map,
                     id: 'claro',
                     position: 'TR'
-                }),
-                new Identify({map: this.map})
+                })
             );
         }
     });
