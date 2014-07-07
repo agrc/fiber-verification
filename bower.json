@@ -1,6 +1,6 @@
 {
-  "name": "Atlas",
-  "version": "0.0.0",
+  "name": "fiber-verification",
+  "version": "0.1.0",
   "dependencies": {
     "dojo": "~1.9",
     "dojox": "~1.9",
