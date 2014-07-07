@@ -20,8 +20,7 @@ define([
     './config',
 
 
-    'dijit/layout/BorderContainer',
-    'dijit/layout/ContentPane'
+    'bootstrap'
 ], function(
     template,
 
@@ -137,7 +136,8 @@ define([
                 new BaseMapSelector({
                     map: this.map,
                     id: 'claro',
-                    position: 'TR'
+                    position: 'TR',
+                    defaultThemeLabel: 'Lite'
                 })
             );
         }
