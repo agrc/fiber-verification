@@ -17,6 +17,8 @@ define([
     'agrc/widgets/locate/FindAddress',
     'agrc/widgets/locate/MagicZoom',
 
+    'ijit/widgets/authentication/LoginRegister',
+
     './config',
 
 
@@ -39,6 +41,8 @@ define([
     BaseMapSelector,
     FindAddress,
     MagicZoom,
+
+    LoginRegister,
 
 
     config
@@ -89,9 +93,13 @@ define([
                     searchLayerIndex: 4,
                     searchField: 'NAME',
                     placeHolder: 'place name...',
-                    maxResultsToDisplay: 10,
-                    'class': 'first'
-                }, this.placesNode)
+                    maxResultsToDisplay: 10
+                }, this.placesNode),
+                new LoginRegister({
+                    appName: config.appName,
+                    logoutDiv: this.logoutDiv,
+                    securedServicesBaseUrl: config.urls.featureService
+                })
             );
 
             this.inherited(arguments);

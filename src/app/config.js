@@ -22,11 +22,10 @@ define(['dojo/has'], function (has) {
         },
 
         fieldNames: {
-            NAME: 'NAME', // counties & municipalities
-            STATE_LGD: 'STATE_LGD', // state
-            GRID1Mil: 'GRID1Mil',
-            GRIS100K: 'GRID100K'
-        }
+
+        },
+
+        appName: 'fiberVerification'
     };
 
     if (has('agrc-api-key') === 'prod') {
