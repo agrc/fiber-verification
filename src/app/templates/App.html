@@ -1,34 +1,74 @@
 <div>
-    <div class='title-container'>
-        <h1>
-            <span class='title'>Atlas Utah</span>
-            <a data-dojo-attach-point='version' class='version' href='ChangeLog.html'></a>
-        </h1>
-        <img src="app/resources/agrc_logo.jpg" alt="agrc logo">
-    </div>
-    <div data-dojo-attach-point='sideBar' 
-        class='side-bar-container container-with-border'>
-        <div class="side-bar-padder"> <!-- required for side bar toggle widget -->
-            Data and services provided by <a href="http://gis.utah.gov">Utah AGRC</a>
-            <div data-dojo-attach-point="printDiv"></div>
-            <div data-dojo-attach-point='popupBlurb' 
-                class='alert alert-info'>
-                You may need to disable pop-up blockers to open the printout.
+    <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-items">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-brand">Provider
+                    <a data-dojo-attach-point='version' class='version' href='ChangeLog.html'></a>
+                </div>
             </div>
-            
-            <h4>Find Address</h4>
-            <div data-dojo-attach-point='geocodeNode'></div>
-            
-            <h4>Find GNIS Place Name</h4>
-            <div data-dojo-attach-point='gnisNode'></div>
-            
-            <h4>Find City</h4>
-            <div data-dojo-attach-point='cityNode'></div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="navbar-items">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-bookmark"></span> Legend</a>
+                        <div class="dropdown-menu">
+                            <span class="label available">1 Month Availablity</span>
+                            <span class="label unavailable">9 Month Availability</span>
+                            <span class="label none">No Availability</span>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-pencil"></span> Tools</a>
+                        <div class="dropdown-menu">
+                            <span class="label available">1 Month Availablity</span>
+                            <span class="label unavailable">9 Month Availability</span>
+                            <span class="label none">No Availability</span>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-filter"></span> Filter</a>
+                        <div class="dropdown-menu">
+                            <span class="label available">1 Month Availablity</span>
+                            <span class="label unavailable">9 Month Availability</span>
+                            <span class="label none">No Availability</span>
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-map-marker"></span> Find</a>
+                        <div class="dropdown-menu">
+                            <span class="label available">1 Month Availablity</span>
+                            <span class="label unavailable">9 Month Availability</span>
+                            <span class="label none">No Availability</span>
+                        </div>
+                    </li>
+                    <li class="active"><a href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
-    </div>
-    <div data-dojo-attach-point='centerContainer'
-        class='center-container container-with-border'>
-        <div data-dojo-attach-point='sidebarToggle'></div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div data-dojo-attach-point='centerContainer' class='center-container container-with-border'>
         <div data-dojo-attach-point='mapDiv'></div>
+    </div>
+    <div class="navbar navbar-inverse navbar-fixed-bottom text-center closed">
+        <div class="btn-group service-types" style="vertical-align:middle">
+            <button type="button" class="btn btn-success">Available within 1 month</button>
+            <button type="button" class="btn btn-primary">Available within 9 months</button>
+            <button type="button" class="btn btn-default">No service</button>
+        </div>
     </div>
 </div>

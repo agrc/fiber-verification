@@ -17,16 +17,10 @@ define([
     'agrc/widgets/locate/FindAddress',
     'agrc/widgets/locate/MagicZoom',
 
-    'ijit/widgets/layout/SideBarToggler',
-
-    'esri/dijit/Print',
-
     './config',
-    './Identify',
 
 
-    'dijit/layout/BorderContainer',
-    'dijit/layout/ContentPane'
+    'bootstrap'
 ], function(
     template,
 
@@ -46,12 +40,8 @@ define([
     FindAddress,
     MagicZoom,
 
-    SideBarToggler,
 
-    Print,
-
-    config,
-    Identify
+    config
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -89,11 +79,6 @@ define([
             this.initMap();
 
             this.childWidgets.push(
-                new SideBarToggler({
-                    sidebar: this.sideBar,
-                    map: this.map,
-                    centerContainer: this.centerContainer
-                }, this.sidebarToggle),
                 new FindAddress({
                     map: this.map,
                     apiKey: config.apiKey
@@ -114,26 +99,7 @@ define([
                     searchField: 'NAME',
                     placeHolder: 'city name...',
                     maxResultsToDisplay: 10
-                }, this.cityNode),
-                this.printer = new Print({
-                    map: this.map,
-                    url: config.exportWebMapUrl,
-                    templates: [{
-                        label: 'Portrait (PDF)',
-                        format: 'PDF',
-                        layout: 'Letter ANSI A Portrait',
-                        options: {
-                            legendLayers: []
-                        }
-                    }, {
-                        label: 'Landscape (PDF)',
-                        format: 'PDF',
-                        layout: 'Letter ANSI A Landscape',
-                        options: {
-                            legendLayers: []
-                        }
-                    }]
-                }, this.printDiv)
+                }, this.cityNode)
             );
 
             this.inherited(arguments);
@@ -150,9 +116,6 @@ define([
                 widget.startup();
             });
 
-            this.printer.on('print-complete', function() {
-                domStyle.set(that.popupBlurb, 'display', 'block');
-            });
 
             this.inherited(arguments);
         },
@@ -170,9 +133,9 @@ define([
                 new BaseMapSelector({
                     map: this.map,
                     id: 'claro',
-                    position: 'TR'
-                }),
-                new Identify({map: this.map})
+                    position: 'TR',
+                    defaultThemeLabel: 'Lite'
+                })
             );
         }
     });
