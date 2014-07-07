@@ -21,36 +21,43 @@
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-bookmark"></span> Legend</a>
                         <div class="dropdown-menu">
-                            <span class="label available">1 Month Availablity</span>
-                            <span class="label unavailable">9 Month Availability</span>
-                            <span class="label none">No Availability</span>
+                            <div class="legend no-coverage">No Availability</div>
+                            <div class="legend one-month">1 Month Availablity</div>
+                            <div class="legend nine-month">9 Month Availability</div>
                         </div>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-pencil"></span> Tools</a>
                         <div class="dropdown-menu">
+                            <span class="label none">No Availability</span>
                             <span class="label available">1 Month Availablity</span>
                             <span class="label unavailable">9 Month Availability</span>
-                            <span class="label none">No Availability</span>
                         </div>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-filter"></span> Filter</a>
                         <div class="dropdown-menu">
-                            <span class="label available">1 Month Availablity</span>
-                            <span class="label unavailable">9 Month Availability</span>
-                            <span class="label none">No Availability</span>
+                            <div class="btn-group-vertical" data-toggle="buttons-radio">
+                              <button type="button" class="btn btn-default">No Availability</button>
+                              <button type="button" class="btn btn-success">1 Month Availablity</button>
+                              <button type="button" class="btn btn-primary">9 Month Availability</button>
+                            </div>
                         </div>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-map-marker"></span> Find</a>
                         <div class="dropdown-menu">
-                            <span class="label available">1 Month Availablity</span>
-                            <span class="label unavailable">9 Month Availability</span>
-                            <span class="label none">No Availability</span>
+                            <form onsubmit='return false;'>
+                                <label class="control-label">Find Place</label>
+                                <div data-dojo-attach-point="placesNode"></div>
+                            </form>
+                            <hr/>
+                            <form onsubmit='return false;'>
+                                <div data-dojo-attach-point="geocodeNode"></div>
+                            </form>
                         </div>
                     </li>
                     <li>

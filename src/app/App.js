@@ -93,17 +93,8 @@ define([
                     searchLayerIndex: 4,
                     searchField: 'NAME',
                     placeHolder: 'place name...',
-                    maxResultsToDisplay: 10,
-                    'class': 'first'
-                }, this.gnisNode),
-                new MagicZoom({
-                    map: this.map,
-                    mapServiceURL: config.urls.vector,
-                    searchLayerIndex: 1,
-                    searchField: 'NAME',
-                    placeHolder: 'city name...',
                     maxResultsToDisplay: 10
-                }, this.cityNode),
+                }, this.placesNode),
                 new LoginRegister({
                     appName: config.appName,
                     logoutDiv: this.logoutDiv,
