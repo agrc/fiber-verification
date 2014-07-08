@@ -17,12 +17,9 @@ define([
     'esri/SpatialReference',
     'esri/layers/QueryDataSource',
     'esri/layers/LayerDataSource',
-    'esri/renderers/UniqueValueRenderer',
-    'esri/renderers/ScaleDependentRenderer',
-
-    'esri/symbols/SimpleLineSymbol',
 
     'esri/toolbars/draw',
+    'esri/tasks/Query',
 
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/map/BaseMapSelector',
@@ -47,12 +44,9 @@ define([
     SpatialReference,
     QueryDataSource,
     LayerDataSource,
-    UniqueValueRenderer,
-    ScaleDependentRenderer,
-
-    LineSymbol,
 
     Draw,
+    Query,
 
     BaseMap,
     BaseMapSelector,
@@ -78,6 +72,10 @@ define([
         // toolbar: Draw
         //      draw toolbar
         toolbar: null,
+
+        // layers: Layer[]
+        //      The collection of layers added with addLayerAndMakeVisible
+        layers: null,
 
         // Properties to be sent into constructor
         // mapDiv: Dom Node
@@ -106,9 +104,7 @@ define([
                 })
             );
 
-            this.symbol = new LineSymbol(LineSymbol.STYLE_SOLID, new Color('#F012BE'), 3);
-
-            this.layers = [];
+            this.layers = {};
 
             this.setUpSubscribes();
         },
@@ -177,27 +173,14 @@ define([
             }
 
             lyr = new LayerClass(props.url, props.layerProps);
-
-            if (props.serviceType === 'provider') {
-                var scaleRenderer = new ScaleDependentRenderer({
-                    rendererInfos: [{
-                        renderer: new UniqueValueRenderer(config.renderers.fine),
-                        minScale: config.renderers.maxScaleForCoarse
-                    },{
-                        renderer: new UniqueValueRenderer(config.renderers.coarse),
-                        maxScale: config.renderers.maxScaleForCoarse
-                    }]
-                });
-                lyr.setRenderer(scaleRenderer);
+            if (props.postCreationCallback) {
+                props.postCreationCallback(lyr);
             }
 
             this.map.addLayer(lyr);
             this.map.addLoaderToLayer(lyr);
 
-            this.layers.push({
-                id: props.id,
-                layer: lyr
-            });
+            this.layers[props.id] = lyr;
         },
         startup: function() {
             // summary:
@@ -239,6 +222,8 @@ define([
         
             if (!this.toolbar) {
                 this.toolbar = new Draw(this.map);
+
+                this.handles.push(this.toolbar.on('draw-end', lang.hitch(this, 'selectFeatures')));
             }
 
             if (geometryType === 'none') {
@@ -246,6 +231,18 @@ define([
             } else {
                 this.toolbar.activate(Draw[geometryType]);
             }
+        },
+        selectFeatures: function (evt) {
+            // summary:
+            //      selects feature in the select feature layer after
+            //      the user completes a drawing
+            // evt: draw-end event object
+            console.log('app.MapController:selectFeatures', arguments);
+        
+            var query = new Query();
+            query.geometry = evt.geometry;
+
+            this.layers[config.layerIds.selection].selectFeatures(query);
         },
         destroy: function() {
             // summary:

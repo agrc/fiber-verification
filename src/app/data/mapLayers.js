@@ -1,13 +1,59 @@
 define([
-    'app/config'
+    'app/config',
+
+    'esri/layers/FeatureLayer',
+
+    'esri/symbols/SimpleFillSymbol',
+    'esri/symbols/SimpleLineSymbol',
+
+    'esri/renderers/UniqueValueRenderer',
+    'esri/renderers/ScaleDependentRenderer',
+
+    'dojo/_base/Color'
 ], function (
-    config
+    config,
+
+    FeatureLayer,
+
+    SimpleFillSymbol,
+    SimpleLineSymbol,
+    
+    UniqueValueRenderer,
+    ScaleDependentRenderer,
+
+    Color
     ) {
     return [{
         url: config.urls.mapService + '/dynamicLayer',
-        serviceType: 'provider'
+        serviceType: 'provider',
+        postCreationCallback: function (lyr) {
+            var scaleRenderer = new ScaleDependentRenderer({
+                rendererInfos: [{
+                    renderer: new UniqueValueRenderer(config.renderers.fine),
+                    minScale: config.renderers.maxScaleForCoarse
+                },{
+                    renderer: new UniqueValueRenderer(config.renderers.coarse),
+                    maxScale: config.renderers.maxScaleForCoarse
+                }]
+            });
+            lyr.setRenderer(scaleRenderer);
+        }
     }, {
         url: config.urls.mapService,
         serviceType: 'dynamic'
+    }, {
+        url: config.urls.mapService + '/0',
+        serviceType: 'feature',
+        layerProps: {
+            autoGeneralize: false,
+            mode: FeatureLayer.MODE_SELECTION
+        },
+        id: config.layerIds.selection,
+        postCreationCallback: function (lyr) {
+            lyr.setSelectionSymbol(new SimpleFillSymbol(
+                SimpleFillSymbol.STYLE_NULL,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color('#F012BE'), 3)
+            ));
+        }
     }];
 });
