@@ -1,7 +1,13 @@
-define([{
-    group: 'layers',
-    value: 'fiber',
-    url: '//localhost/arcgis/rest/services/fiber/MapServer/',
-    serviceType: null,
-    labelText: 'Fiber Availability'
-}]);
+define([
+    'app/config'
+], function (
+    config
+    ) {
+    return [{
+        url: config.urls.mapService + '/dynamicLayer',
+        serviceType: 'provider'
+    }, {
+        url: config.urls.mapService,
+        serviceType: 'dynamic'
+    }];
+});

@@ -6,6 +6,7 @@ define([
     'dojo/dom-construct',
 
     'dojo/topic',
+    'dojo/string',
 
     'esri/graphic',
     'esri/lang',
@@ -13,6 +14,11 @@ define([
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
+    'esri/SpatialReference',
+    'esri/layers/QueryDataSource',
+    'esri/layers/LayerDataSource',
+    'esri/renderers/UniqueValueRenderer',
+    'esri/renderers/ScaleDependentRenderer',
 
     'esri/symbols/SimpleLineSymbol',
 
@@ -28,6 +34,7 @@ define([
     domConstruct,
 
     topic,
+    dojoString,
 
     Graphic,
     esriLang,
@@ -35,6 +42,11 @@ define([
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
     FeatureLayer,
+    SpatialReference,
+    QueryDataSource,
+    LayerDataSource,
+    UniqueValueRenderer,
+    ScaleDependentRenderer,
 
     LineSymbol,
 
@@ -108,73 +120,71 @@ define([
 
             // check to see if layer has already been added to the map
             var lyr;
-            var alreadyAdded = array.some(this.map.graphicsLayerIds, function(id) {
-                console.log('app.MapController::addLayerAndMakeVisible||looping ids ', id);
-                return id === props.id;
-            }, this);
+            var LayerClass;
 
-            console.log('app.MapController::addLayerAndMakeVisible||already added ', alreadyAdded);
+            switch (props.serviceType || 'dynamic') {
+                case 'provider':
+                    {
+                        LayerClass = FeatureLayer;
+                        var queryDataSource = new QueryDataSource();
+                        queryDataSource.workspaceId = config.workspaceId;
+                        queryDataSource.query = dojoString.substitute(config.query, {
+                            provName: 'All West',
+                            ownerName: config.ownerName
+                        });
+                        queryDataSource.oidFields = ['OBJECTID'];
+                        queryDataSource.geometryType = 'polygon';
+                        queryDataSource.spatialReference = new SpatialReference({wkid: 26912});
 
-            if (!alreadyAdded) {
-                var LayerClass;
+                        var layerDataSource = new LayerDataSource();
+                        layerDataSource.dataSource = queryDataSource;
 
-                switch (props.serviceType || 'dynamic') {
-                    case 'feature':
-                        {
-                            LayerClass = FeatureLayer;
-                            break;
-                        }
-                    case 'tiled':
-                        {
-                            LayerClass = ArcGISTiledMapServiceLayer;
-                            break;
-                        }
-                    default:
-                        {
-                            LayerClass = ArcGISDynamicMapServiceLayer;
-                            break;
-                        }
-                }
+                        props.layerProps = {
+                            source: layerDataSource,
+                            autoGeneralize: false
+                        };
 
-                lyr = new LayerClass(props.url, props);
+                        break;
+                    }
+                case 'feature':
+                    {
+                        LayerClass = FeatureLayer;
+                        break;
+                    }
+                case 'tiled':
+                    {
+                        LayerClass = ArcGISTiledMapServiceLayer;
+                        break;
+                    }
+                default:
+                    {
+                        LayerClass = ArcGISDynamicMapServiceLayer;
+                        break;
+                    }
+            }
 
-                this.map.addLayer(lyr);
-                this.map.addLoaderToLayer(lyr);
+            lyr = new LayerClass(props.url, props.layerProps);
 
-                this.layers.push({
-                    id: props.id,
-                    layer: lyr
+            if (props.serviceType === 'provider') {
+                var scaleRenderer = new ScaleDependentRenderer({
+                    rendererInfos: [{
+                        renderer: new UniqueValueRenderer(config.renderers.fine),
+                        minScale: config.renderers.maxScaleForCoarse
+                    },{
+                        renderer: new UniqueValueRenderer(config.renderers.coarse),
+                        maxScale: config.renderers.maxScaleForCoarse
+                    }]
                 });
+                lyr.setRenderer(scaleRenderer);
             }
 
-            this.activeLayer = array.filter(this.layers, function(container) {
-                console.log('app.MapController::addLayerAndMakeVisible||hiding layer ', container.id);
-                container.layer.hide();
-                return container.id === props.id;
-            }, this)[0];
+            this.map.addLayer(lyr);
+            this.map.addLoaderToLayer(lyr);
 
-            if (this.activeLayer) {
-                this.clearGraphic(this.graphic);
-                this.updateOpacity();
-                this.activeLayer.layer.show();
-            }
-        },
-        updateOpacity: function(opacity) {
-            // summary:
-            //      changes a layers opacity
-            // opacity
-            console.log('app.MapController::updateOpacity', arguments);
-
-            if (opacity !== undefined) {
-                this.currentOpacity = opacity / 100;
-            }
-
-            if (!this.activeLayer) {
-                //no layer selected yet return
-                return;
-            }
-
-            this.activeLayer.layer.setOpacity(this.currentOpacity);
+            this.layers.push({
+                id: props.id,
+                layer: lyr
+            });
         },
         startup: function() {
             // summary:
