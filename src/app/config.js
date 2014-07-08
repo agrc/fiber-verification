@@ -30,6 +30,9 @@ define(['dojo/has'], function (has) {
         topics: {
             map: {
                 enableLayer: 'app.addLayer'
+            },
+            selectionTools: {
+                activateTool: 'app.selectionTools.activateTool'
             }
         },
 

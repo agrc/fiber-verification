@@ -22,6 +22,8 @@ define([
 
     'esri/symbols/SimpleLineSymbol',
 
+    'esri/toolbars/draw',
+
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/map/BaseMapSelector',
 
@@ -50,6 +52,8 @@ define([
 
     LineSymbol,
 
+    Draw,
+
     BaseMap,
     BaseMapSelector,
 
@@ -68,9 +72,16 @@ define([
         //      holds child widgets 
         childWidgets: null,
 
-        // Properties to be sent into constructor
         // map: agrc/widgets/map/BaseMap
         map: null,
+
+        // toolbar: Draw
+        //      draw toolbar
+        toolbar: null,
+
+        // Properties to be sent into constructor
+        // mapDiv: Dom Node
+        mapDiv: null,
 
         init: function(params) {
             // summary:
@@ -108,7 +119,9 @@ define([
 
             this.handles.push(
                 topic.subscribe(config.topics.map.enableLayer,
-                    lang.hitch(this, 'addLayerAndMakeVisible'))
+                    lang.hitch(this, 'addLayerAndMakeVisible')),
+                topic.subscribe(config.topics.selectionTools.activateTool,
+                    lang.hitch(this, 'activateTool'))
             );
         },
         addLayerAndMakeVisible: function(props) {
@@ -216,6 +229,22 @@ define([
             if (graphic) {
                 this.map.graphics.remove(graphic);
                 this.graphic = null;
+            }
+        },
+        activateTool: function (geometryType) {
+            // summary:
+            //      activates tools on the drawing toolbar
+            // geometryType: See Draw Constants
+            console.log('app.MapController::activateTool', arguments);
+        
+            if (!this.toolbar) {
+                this.toolbar = new Draw(this.map);
+            }
+
+            if (geometryType === 'none') {
+                this.toolbar.deactivate();
+            } else {
+                this.toolbar.activate(Draw[geometryType]);
             }
         },
         destroy: function() {

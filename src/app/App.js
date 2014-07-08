@@ -21,6 +21,7 @@ define([
 
     './config',
     './MapController',
+    './SelectionTools',
 
     './data/mapLayers',
 
@@ -49,6 +50,7 @@ define([
 
     config,
     MapController,
+    SelectionTools,
 
     mapLayers
 ) {
@@ -119,7 +121,10 @@ define([
                     placeHolder: 'place name...',
                     maxResultsToDisplay: 10
                 }, this.placesNode),
-                login
+                login,
+                new SelectionTools({
+
+                }, this.selectionToolsDiv)
             );
 
             this.inherited(arguments);
