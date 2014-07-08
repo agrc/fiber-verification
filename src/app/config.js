@@ -163,15 +163,15 @@ define(['dojo/has'], function (has) {
 
     if (has('agrc-api-key') === 'prod') {
         // mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-A94B063C533889';
+        window.AGRC.apiKey = 'AGRC-E7FEB434755864';
         window.AGRC.ownerName = 'FiberAdmin';
     } else if (has('agrc-api-key') === 'stage') {
         // test.mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-AC122FA9671436';
+        window.AGRC.apiKey = 'AGRC-FFCDAD6B933051';
         window.AGRC.ownerName = 'FiberAdmin';
     } else {
         // localhost
-        window.AGRC.apiKey = 'AGRC-63E1FF17767822';
+        window.AGRC.apiKey = 'AGRC-B5D62BD2151902';
         window.AGRC.ownerName = 'DBO';
     }
 
