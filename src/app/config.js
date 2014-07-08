@@ -54,7 +54,7 @@ define(['dojo/has'], function (has) {
             ProvName: 'ProvName'
         },
 
-        appName: 'fiberVerification',
+        appName: 'fiberverification',
 
         renderers: {
             maxScaleForCoarse: 140000,
