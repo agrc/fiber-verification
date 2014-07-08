@@ -111,7 +111,19 @@ module.exports = function(grunt) {
                 version: 3.9
             }
         },
-        clean: ['dist']
+        clean: ['dist'],
+        compress: {
+            main: {
+                options: {
+                    archive: 'deploy/fiberVerification.zip'
+                },
+                files: [{
+                    src: ['dist/**'],
+                    dest: '/'
+                }]
+            }
+        }
+ 
     });
 
     // Register tasks.
@@ -125,10 +137,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-esri-slurp');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-processhtml');
+    grunt.loadNpmTasks('grunt-contrib-compress');
 
     // Default task.
     grunt.registerTask('default', ['jasmine:default:build', 'jshint', 'connect', 'watch']);
-    grunt.registerTask('build', ['clean', 'dojo:prod', 'imagemin:dynamic', 'copy', 'processhtml:dist']);
-    grunt.registerTask('stage-build', ['clean', 'dojo:stage', 'imagemin:dynamic', 'copy', 'processhtml:dist']);
+    grunt.registerTask('build', ['clean', 'dojo:prod', 'imagemin:dynamic', 'copy', 'processhtml:dist', 'compress']);
+    grunt.registerTask('stage-build', ['clean', 'dojo:stage', 'imagemin:dynamic', 'copy', 'processhtml:dist', 'compress']);
     grunt.registerTask('travis', ['esri_slurp', 'jshint', 'connect', 'jasmine:default']);
 };
