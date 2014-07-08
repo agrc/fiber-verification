@@ -24,7 +24,6 @@ body, html, .app {
     font-weight: bold;
     font-size: 25px;
     color: white;
-    max-width: 350px
 }
 .app .version {
     font-size: 8px;

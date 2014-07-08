@@ -129,7 +129,7 @@ define([
                         var queryDataSource = new QueryDataSource();
                         queryDataSource.workspaceId = config.workspaceId;
                         queryDataSource.query = dojoString.substitute(config.query, {
-                            provName: 'All West',
+                            provName: config.user.agency,
                             ownerName: config.ownerName
                         });
                         queryDataSource.oidFields = ['OBJECTID'];

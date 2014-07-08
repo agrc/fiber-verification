@@ -25,6 +25,8 @@ define(['dojo/has'], function (has) {
         //      The api key used for services on api.mapserv.utah.gov
         apiKey: '', // acquire at developer.mapserv.utah.gov
 
+        user: null, // to be populated after successful sign in
+
         topics: {
             map: {
                 enableLayer: 'app.addLayer'

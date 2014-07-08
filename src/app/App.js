@@ -85,13 +85,26 @@ define([
             // set version number
             this.version.innerHTML = config.version;
 
-            MapController.init({
-                mapDiv: this.mapDiv
+            var login = new LoginRegister({
+                appName: config.appName,
+                logoutDiv: this.logoutDiv,
+                securedServicesBaseUrl: 'blah'
             });
 
-            array.forEach(mapLayers, function(layer){
-                topic.publish(config.topics.map.enableLayer, layer);
-            }, this);
+            var that = this;
+            login.on('sign-in-success', function (event) {
+                config.user = event.user;
+
+                that.providerNameSpan.innerHTML = event.user.agency;
+
+                MapController.init({
+                    mapDiv: that.mapDiv
+                });
+
+                array.forEach(mapLayers, function(layer){
+                    topic.publish(config.topics.map.enableLayer, layer);
+                }, that);
+            });
 
             this.childWidgets.push(
                 new FindAddress({
@@ -106,11 +119,7 @@ define([
                     placeHolder: 'place name...',
                     maxResultsToDisplay: 10
                 }, this.placesNode),
-                new LoginRegister({
-                    appName: config.appName,
-                    logoutDiv: this.logoutDiv,
-                    securedServicesBaseUrl: config.urls.featureService
-                })
+                login
             );
 
             this.inherited(arguments);
