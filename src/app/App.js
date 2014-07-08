@@ -7,19 +7,22 @@ define([
     'dojo/dom',
     'dojo/dom-style',
 
+    'dojo/topic',
+
     'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'dijit/registry',
 
-    'agrc/widgets/map/BaseMap',
-    'agrc/widgets/map/BaseMapSelector',
     'agrc/widgets/locate/FindAddress',
     'agrc/widgets/locate/MagicZoom',
 
     'ijit/widgets/authentication/LoginRegister',
 
     './config',
+    './MapController',
+
+    './data/mapLayers',
 
 
     'bootstrap'
@@ -32,20 +35,22 @@ define([
     dom,
     domStyle,
 
+    topic,
+
     _WidgetBase,
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
     registry,
 
-    BaseMap,
-    BaseMapSelector,
     FindAddress,
     MagicZoom,
 
     LoginRegister,
 
+    config,
+    MapController,
 
-    config
+    mapLayers
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -80,15 +85,21 @@ define([
             // set version number
             this.version.innerHTML = config.version;
 
-            this.initMap();
+            MapController.init({
+                mapDiv: this.mapDiv
+            });
+
+            array.forEach(mapLayers, function(layer){
+                topic.publish(config.topics.map.enableLayer, layer);
+            }, this);
 
             this.childWidgets.push(
                 new FindAddress({
-                    map: this.map,
+                    map: MapController.map,
                     apiKey: config.apiKey
                 }, this.geocodeNode),
                 new MagicZoom({
-                    map: this.map,
+                    map: MapController.map,
                     mapServiceURL: config.urls.vector,
                     searchLayerIndex: 4,
                     searchField: 'NAME',
@@ -116,27 +127,7 @@ define([
                 widget.startup();
             });
 
-
             this.inherited(arguments);
-        },
-        initMap: function() {
-            // summary:
-            //      Sets up the map
-            console.info('app.App::initMap', arguments);
-
-            this.map = new BaseMap(this.mapDiv, {
-                useDefaultBaseMap: false,
-                showAttribution: false
-            });
-
-            this.childWidgets.push(
-                new BaseMapSelector({
-                    map: this.map,
-                    id: 'claro',
-                    position: 'TR',
-                    defaultThemeLabel: 'Lite'
-                })
-            );
         }
     });
 });

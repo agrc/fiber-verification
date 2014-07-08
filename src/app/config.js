@@ -18,7 +18,14 @@ define(['dojo/has'], function (has) {
 
         urls: {
             search: 'http://api.mapserv.utah.gov/api/v1/search/{0}/{1}',
-            vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer'
+            vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer',
+            featureService: ''
+        },
+
+        topics: {
+            map: {
+                enableLayer: 'app.addLayer'
+            }
         },
 
         fieldNames: {
