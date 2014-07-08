@@ -97,15 +97,15 @@ define([
 
                 that.providerNameSpan.innerHTML = event.user.agency;
 
-                MapController.init({
-                    mapDiv: that.mapDiv
-                });
-
                 array.forEach(mapLayers, function(layer){
                     topic.publish(config.topics.map.enableLayer, layer);
                 }, that);
             });
 
+            MapController.init({
+                mapDiv: that.mapDiv
+            });
+            
             this.childWidgets.push(
                 new FindAddress({
                     map: MapController.map,
