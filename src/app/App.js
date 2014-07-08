@@ -3,6 +3,7 @@ define([
 
     'dojo/_base/declare',
     'dojo/_base/array',
+    'dojo/string',
 
     'dojo/dom',
     'dojo/dom-style',
@@ -19,6 +20,14 @@ define([
 
     'ijit/widgets/authentication/LoginRegister',
 
+    'esri/SpatialReference',
+    'esri/layers/QueryDataSource',
+    'esri/layers/LayerDataSource',
+    'esri/layers/FeatureLayer',
+    'esri/layers/ArcGISDynamicMapServiceLayer',
+    'esri/renderers/UniqueValueRenderer',
+    'esri/renderers/ScaleDependentRenderer',
+
     './config',
 
 
@@ -28,6 +37,7 @@ define([
 
     declare,
     array,
+    dojoString,
 
     dom,
     domStyle,
@@ -44,6 +54,13 @@ define([
 
     LoginRegister,
 
+    SpatialReference,
+    QueryDataSource,
+    LayerDataSource,
+    FeatureLayer,
+    ArcGISDynamicMapServiceLayer,
+    UniqueValueRenderer,
+    ScaleDependentRenderer,
 
     config
 ) {
@@ -111,7 +128,6 @@ define([
 
             var that = this;
             array.forEach(this.childWidgets, function (widget) {
-                console.log(widget.declaredClass);
                 that.own(widget);
                 widget.startup();
             });
@@ -137,6 +153,40 @@ define([
                     defaultThemeLabel: 'Lite'
                 })
             );
+
+            var queryDataSource = new QueryDataSource();
+            queryDataSource.workspaceId = config.workspaceId;
+            queryDataSource.query = dojoString.substitute(config.query, {
+                provName: 'All West',
+                ownerName: config.ownerName
+            });
+            queryDataSource.oidFields = ['OBJECTID'];
+            queryDataSource.geometryType = 'polygon';
+            queryDataSource.spatialReference = new SpatialReference({wkid: 26912});
+
+            var layerDataSource = new LayerDataSource();
+            layerDataSource.dataSource = queryDataSource;
+
+            var fLayer = new FeatureLayer(config.urls.mapService + '/dynamicLayer', {
+                source: layerDataSource,
+                autoGeneralize: false
+            });
+
+            var scaleRenderer = new ScaleDependentRenderer({
+                rendererInfos: [{
+                    renderer: new UniqueValueRenderer(config.renderers.fine),
+                    minScale: config.renderers.maxScaleForCoarse
+                },{
+                    renderer: new UniqueValueRenderer(config.renderers.coarse),
+                    maxScale: config.renderers.maxScaleForCoarse
+                }]
+            });
+            fLayer.setRenderer(scaleRenderer);
+            // fLayer.setOpacity(0.8);
+
+            this.map.addLayer(new ArcGISDynamicMapServiceLayer(config.urls.mapService));
+
+            this.map.addLayer(fLayer);
         }
     });
 });
