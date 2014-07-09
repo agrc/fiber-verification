@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Commands\UpdateProviderCoverageCommand.cs" />
     <Compile Include="Configuration\DevConfig.cs" />
     <Compile Include="Configuration\IConfigurable.cs" />
     <Compile Include="Configuration\StageConfig.cs" />

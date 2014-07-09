@@ -58,7 +58,7 @@ namespace FiberVerification.Editing.Api
 
                         var content = await request.Content.ReadAsAsync<SecurityErrorResponse>(new MediaTypeFormatter[]{new TextPlainResponseFormatter()});
 
-                        if (content.Error != null)
+                         if (content.Error != null)
                         {
                             var statusCode = content.Error.Code;
                             return Negotiate
