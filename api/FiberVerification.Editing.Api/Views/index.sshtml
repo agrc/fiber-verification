@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Fiber Verification</title>
+  <link href="//fonts.googleapis.com/css?family=Lato:100" media="all" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    body {
+      text-align: center;
+    }
+
+    .title {
+      font: 100 72px/150px "Lato";
+      letter-spacing: -2px;
+      text-decoration: none;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="title">Fiber Verification</div>
+  <img src="@Path['~/Content/fiber-logo.png']" alt="Fiber logo" /><br />
+</body>
+</html>
