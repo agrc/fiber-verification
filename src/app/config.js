@@ -23,7 +23,7 @@ define(['dojo/has'], function (has) {
 
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
-        apiKey: '', // acquire at developer.mapserv.utah.gov
+        apiKey: null, // acquire at developer.mapserv.utah.gov
 
         user: null, // to be populated after successful sign in
 
@@ -164,11 +164,11 @@ define(['dojo/has'], function (has) {
     if (has('agrc-api-key') === 'prod') {
         // mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-E7FEB434755864';
-        window.AGRC.ownerName = 'FiberAdmin';
+        window.AGRC.ownerName = 'FIBERADMIN';
     } else if (has('agrc-api-key') === 'stage') {
         // test.mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-FFCDAD6B933051';
-        window.AGRC.ownerName = 'FiberAdmin';
+        window.AGRC.ownerName = 'FIBERADMIN';
     } else {
         // localhost
         window.AGRC.apiKey = 'AGRC-B5D62BD2151902';
