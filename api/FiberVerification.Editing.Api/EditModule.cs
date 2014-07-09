@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using Containers;
+using FiberVerification.Editing.Api.Commands;
 using FiberVerification.Editing.Api.Configuration;
 using FiberVerification.Editing.Api.Formatters;
 using FiberVerification.Editing.Api.Models;
@@ -31,7 +32,6 @@ namespace FiberVerification.Editing.Api
 
                     if(string.IsNullOrEmpty(model.Role) ||
                         string.IsNullOrEmpty(model.Provider) ||
-                        string.IsNullOrEmpty(model.Coverage) ||
                         (model.HoneyComb == null || !model.HoneyComb.Any()))
                     {
                         return Negotiate
@@ -67,7 +67,15 @@ namespace FiberVerification.Editing.Api
                         }
                     }
 
-                    return Negotiate.WithStatusCode(200);
+                    using (var command = new UpdateProviderCoverageCommandAsync(
+                        model.HoneyComb, model.Provider,
+                        model.Coverage))
+                    {
+
+                        var rowsAffected = await CommandPattern.CommandExecutor.ExecuteCommandAsync(command);
+
+                        return Negotiate.WithModel(rowsAffected).WithStatusCode(200);
+                    }
                 };
         }
     }

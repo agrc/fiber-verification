@@ -59,6 +59,7 @@
       <HintPath>packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -80,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Commands\UpdateProviderCoverageCommand.cs" />
+    <Compile Include="Commands\UpdateProviderCoverageCommandAsync.cs" />
     <Compile Include="Configuration\DevConfig.cs" />
     <Compile Include="Configuration\IConfigurable.cs" />
     <Compile Include="Configuration\StageConfig.cs" />
@@ -107,6 +108,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommandPattern\CommandPattern.csproj">
+      <Project>{b041c22a-a2fa-4805-bb6c-80c1e1c4fe4d}</Project>
+      <Name>CommandPattern</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Containers\Containers.csproj">
       <Project>{c0d9871e-b3a2-4f52-983c-0c5cdad42836}</Project>
       <Name>Containers</Name>

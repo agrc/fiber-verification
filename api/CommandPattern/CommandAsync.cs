@@ -16,11 +16,11 @@ namespace CommandPattern
 
     public abstract class CommandAsync
     {
-        public abstract Task<bool> Execute();
+        public abstract Task<int> Execute();
 
         public abstract override string ToString();
 
-        public virtual async Task<bool> Run()
+        public virtual async Task<int> Run()
         {
             return await Execute();
         }

@@ -45,7 +45,7 @@
         /// <value>
         /// The coverage type update the honeycomb id's to.
         /// </value>
-        public string Coverage { get; set; }
+        public int Coverage { get; set; }
     }
 
 }

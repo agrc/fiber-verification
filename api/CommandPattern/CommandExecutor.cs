@@ -44,7 +44,7 @@ namespace CommandPattern
         /// <typeparam name="TResult">The type of the result.</typeparam>
         /// <param name="cmd">The CMD.</param>
         /// <returns></returns>
-        public static async Task<bool> ExecuteCommandAsync(CommandAsync cmd)
+        public static async Task<int> ExecuteCommandAsync(CommandAsync cmd)
         {
             return await cmd.Run();
         }
