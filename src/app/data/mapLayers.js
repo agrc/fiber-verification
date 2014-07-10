@@ -9,7 +9,8 @@ define([
     'esri/renderers/UniqueValueRenderer',
     'esri/renderers/ScaleDependentRenderer',
 
-    'dojo/_base/Color'
+    'dojo/_base/Color',
+    'dojo/topic'
 ], function (
     config,
 
@@ -21,7 +22,8 @@ define([
     UniqueValueRenderer,
     ScaleDependentRenderer,
 
-    Color
+    Color,
+    topic
     ) {
     return [{
         url: config.urls.mapService + '/dynamicLayer',
@@ -51,9 +53,15 @@ define([
         id: config.layerIds.selection,
         postCreationCallback: function (lyr) {
             lyr.setSelectionSymbol(new SimpleFillSymbol(
-                SimpleFillSymbol.STYLE_NULL,
-                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color('#F012BE'), 3)
+                SimpleFillSymbol.STYLE_SOLID,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color('#F012BE'), 3),
+                new Color([85, 85, 85, 0.3])
             ));
+            lyr.on('click', function (evt) {
+                console.log(evt);
+                topic.publish(config.topics.map.selectedFeatureClicked, evt.mapPoint);
+                evt.stopPropagation();
+            });
         }
     }];
 });

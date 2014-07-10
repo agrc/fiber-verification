@@ -61,8 +61,8 @@ define([
             console.log('app.SelectionTools::setupConnections', arguments);
 
             this.btns = query('.btn', this.domNode);
-
             this.btns.onclick(lang.hitch(this, 'onBtnClick'));
+
         },
         onBtnClick: function (evt) {
             // summary:

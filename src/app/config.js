@@ -29,7 +29,9 @@ define(['dojo/has'], function (has) {
 
         topics: {
             map: {
-                enableLayer: 'app.addLayer'
+                enableLayer: 'app.addLayer',
+                click: 'app.map.click',
+                selectedFeatureClicked: 'app.map.selectedFeatureClicked'
             },
             selectionTools: {
                 activateTool: 'app.selectionTools.activateTool'
