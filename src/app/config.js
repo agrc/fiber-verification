@@ -32,7 +32,8 @@ define(['dojo/has'], function (has) {
                 enableLayer: 'app.addLayer',
                 click: 'app.map.click',
                 featuresSelected: 'app.map.featuresSelected',
-                clearSelection: 'app.map.clearSelection'
+                clearSelection: 'app.map.clearSelection',
+                selectedFeatureClicked: 'app.map.selectedFeatureClicked'
             },
             selectionTools: {
                 activateTool: 'app.selectionTools.activateTool'
