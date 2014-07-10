@@ -4,6 +4,7 @@ define([
 
     'dojo/topic',
     'dojo/string',
+    'dojo/dom-construct',
 
     'esri/graphic',
 
@@ -27,6 +28,7 @@ define([
 
     topic,
     dojoString,
+    domConstruct,
 
     Graphic,
 
