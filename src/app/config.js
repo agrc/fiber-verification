@@ -54,7 +54,7 @@ define(['dojo/has'], function (has) {
             'SELECT h.HexID, h.OBJECTID, h.SHAPE, psa.ProvName, psa.ServiceClass ' +
             'FROM FiberVerification.${ownerName}.HEXAGONS as h ' +
             'INNER JOIN ( ' +
-                'SELECT HexID, ProvName, ServiceClass from FiberVerification.${ownerName}.PROVIDERSERVICEAREAS ' +
+                'SELECT HexID, ProvName, ServiceClass from FiberVerification.${ownerName}.SERVICEAREAS ' +
                 'WHERE ProvName = \'${provName}\' ' +
                 ') as psa ' +
             'ON psa.HexID = h.HexID',
