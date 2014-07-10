@@ -169,7 +169,7 @@ module.exports = function(grunt) {
         'compress'
     ]);
     grunt.registerTask('travis', [
-        'newer:esri_slurp',
+        'esri_slurp',
         'jshint',
         'connect',
         'jasmine:default'

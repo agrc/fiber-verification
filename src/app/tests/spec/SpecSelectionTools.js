@@ -1,6 +1,7 @@
 require([
     'app/SelectionTools',
 
+    'dojo/_base/window',
     'dojo/query',
 
     'dojo/dom-construct',
@@ -8,6 +9,7 @@ require([
 ], function(
     WidgetUnderTest,
 
+    win,
     query,
 
     domConstruct,
@@ -21,7 +23,7 @@ require([
         };
 
         beforeEach(function() {
-            widget = new WidgetUnderTest(null, domConstruct.create('div', null, document.body));
+            widget = new WidgetUnderTest(null, domConstruct.create('div', null, win.body()));
             widget.startup();
         });
 
