@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '0.11'
+- '0.10'
 before_install:
 - npm install -g grunt-cli
 - npm install -g bower
@@ -8,9 +8,3 @@ before_install:
 notifications:
   email:
     on_success: never
-env:
-  global:
-  - secure: YmI2AprTpgLewVYHD2VOBpVR6fyCpg1/hMnn170L5nZ3wF9YNqp78ePqhWELRN0qKl/bg8/AST0FQSC2iaRBo3FGK1mhZIvKiTcS+k3Z17juUZmQmd6ux8FXdc+NF7ENfyP/yqIvRPuIHPw4qQ+taC5pLhxigVnkMVJPM8+CIss=
-  - secure: BpcsWWAw3cwDNoh3gBLYbKaTEfC9iXYjMmValrH9BqfBeE91MFZRQbrFJyoQhHCjYb+QDA9JoChCGuUPCrFXf4pdTgVhuEEhSn75fKsdv038OMNN6tMT93LU03oGsvsi5hUGChiazCWfeLy+ZKbckwqKLtz86PhGl2arukpbj24=
-addons:
-  sauce_connect: false

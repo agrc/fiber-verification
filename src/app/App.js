@@ -1,147 +1,140 @@
-define([
-    'dojo/text!app/templates/App.html',
+define({});
+// define([
+//     'dojo/text!./templates/App.html',
 
-    'dojo/_base/declare',
-    'dojo/_base/array',
+//     'dojo/_base/declare',
+//     'dojo/_base/array',
 
-    'dojo/dom',
-    'dojo/dom-style',
+//     'dojo/topic',
 
-    'dojo/topic',
+//     'dijit/_WidgetBase',
+//     'dijit/_TemplatedMixin',
+//     'dijit/_WidgetsInTemplateMixin',
 
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',
-    'dijit/registry',
+//     'agrc/widgets/locate/FindAddress',
+//     'agrc/widgets/locate/MagicZoom',
 
-    'agrc/widgets/locate/FindAddress',
-    'agrc/widgets/locate/MagicZoom',
+//     'ijit/widgets/authentication/LoginRegister',
 
-    'ijit/widgets/authentication/LoginRegister',
+//     './config',
+//     './MapController',
+//     './SelectionTools',
 
-    './config',
-    './MapController',
-    './SelectionTools',
-
-    './data/mapLayers',
+//     './data/mapLayers',
 
 
-    'bootstrap'
-], function(
-    template,
+//     'bootstrap'
+// ], function(
+//     template,
 
-    declare,
-    array,
+//     declare,
+//     array,
 
-    dom,
-    domStyle,
+//     topic,
 
-    topic,
+//     _WidgetBase,
+//     _TemplatedMixin,
+//     _WidgetsInTemplateMixin,
 
-    _WidgetBase,
-    _TemplatedMixin,
-    _WidgetsInTemplateMixin,
-    registry,
+//     FindAddress,
+//     MagicZoom,
 
-    FindAddress,
-    MagicZoom,
+//     LoginRegister,
 
-    LoginRegister,
+//     config,
+//     MapController,
+//     SelectionTools,
 
-    config,
-    MapController,
-    SelectionTools,
+//     mapLayers
+// ) {
+//     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+//         // summary:
+//         //      The main widget for the app
 
-    mapLayers
-) {
-    return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
-        // summary:
-        //      The main widget for the app
+//         widgetsInTemplate: true,
+//         templateString: template,
+//         baseClass: 'app',
 
-        widgetsInTemplate: true,
-        templateString: template,
-        baseClass: 'app',
+//         // childWidgets: Object[]
+//         //      container for holding custom child widgets
+//         childWidgets: null,
 
-        // childWidgets: Object[]
-        //      container for holding custom child widgets
-        childWidgets: null,
+//         // map: agrc.widgets.map.Basemap
+//         map: null,
 
-        // map: agrc.widgets.map.Basemap
-        map: null,
+//         constructor: function() {
+//             // summary:
+//             //      first function to fire after page loads
+//             console.info('app.App::constructor', arguments);
 
-        constructor: function() {
-            // summary:
-            //      first function to fire after page loads
-            console.info('app.App::constructor', arguments);
+//             config.app = this;
+//             this.childWidgets = [];
 
-            config.app = this;
-            this.childWidgets = [];
+//             this.inherited(arguments);
+//         },
+//         postCreate: function() {
+//             // summary:
+//             //      Fires when
+//             console.log('app.App::postCreate', arguments);
 
-            this.inherited(arguments);
-        },
-        postCreate: function() {
-            // summary:
-            //      Fires when
-            console.log('app.App::postCreate', arguments);
+//             // set version number
+//             this.version.innerHTML = config.version;
 
-            // set version number
-            this.version.innerHTML = config.version;
+//             var login = new LoginRegister({
+//                 appName: config.appName,
+//                 logoutDiv: this.logoutDiv,
+//                 securedServicesBaseUrl: 'blah'
+//             });
 
-            var login = new LoginRegister({
-                appName: config.appName,
-                logoutDiv: this.logoutDiv,
-                securedServicesBaseUrl: 'blah'
-            });
+//             var that = this;
+//             login.on('sign-in-success', function (event) {
+//                 config.user = event.user;
 
-            var that = this;
-            login.on('sign-in-success', function (event) {
-                config.user = event.user;
+//                 that.providerNameSpan.innerHTML = event.user.agency;
 
-                that.providerNameSpan.innerHTML = event.user.agency;
+//                 array.forEach(mapLayers, function(layer){
+//                     topic.publish(config.topics.map.enableLayer, layer);
+//                 }, that);
+//             });
 
-                array.forEach(mapLayers, function(layer){
-                    topic.publish(config.topics.map.enableLayer, layer);
-                }, that);
-            });
+//             MapController.init({
+//                 mapDiv: that.mapDiv
+//             });
 
-            MapController.init({
-                mapDiv: that.mapDiv
-            });
-            
-            this.childWidgets.push(
-                new FindAddress({
-                    map: MapController.map,
-                    apiKey: config.apiKey
-                }, this.geocodeNode),
-                new MagicZoom({
-                    map: MapController.map,
-                    mapServiceURL: config.urls.vector,
-                    searchLayerIndex: 4,
-                    searchField: 'NAME',
-                    placeHolder: 'place name...',
-                    maxResultsToDisplay: 10
-                }, this.placesNode),
-                login,
-                new SelectionTools({
+//             this.childWidgets.push(
+//                 new FindAddress({
+//                     map: MapController.map,
+//                     apiKey: config.apiKey
+//                 }, this.geocodeNode),
+//                 new MagicZoom({
+//                     map: MapController.map,
+//                     mapServiceURL: config.urls.vector,
+//                     searchLayerIndex: 4,
+//                     searchField: 'NAME',
+//                     placeHolder: 'place name...',
+//                     maxResultsToDisplay: 10
+//                 }, this.placesNode),
+//                 login,
+//                 new SelectionTools({
 
-                }, this.selectionToolsDiv)
-            );
+//                 }, this.selectionToolsDiv)
+//             );
 
-            this.inherited(arguments);
-        },
-        startup: function() {
-            // summary:
-            //      Fires after postCreate when all of the child widgets are finished laying out.
-            console.log('app.App::startup', arguments);
+//             this.inherited(arguments);
+//         },
+//         startup: function() {
+//             // summary:
+//             //      Fires after postCreate when all of the child widgets are finished laying out.
+//             console.log('app.App::startup', arguments);
 
-            var that = this;
-            array.forEach(this.childWidgets, function (widget) {
-                console.log(widget.declaredClass);
-                that.own(widget);
-                widget.startup();
-            });
+//             var that = this;
+//             array.forEach(this.childWidgets, function (widget) {
+//                 console.log(widget.declaredClass);
+//                 that.own(widget);
+//                 widget.startup();
+//             });
 
-            this.inherited(arguments);
-        }
-    });
-});
+//             this.inherited(arguments);
+//         }
+//     });
+// });

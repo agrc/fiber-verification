@@ -33,37 +33,37 @@
         ]
     };
     require(config, [
-        'jquery',
+        // 'jquery',
 
-        'app/App',
+        // 'app/App',
 
-        'dojo/_base/lang',
-        'dojo/dom',
+        // 'dojo/_base/lang',
+        // 'dojo/dom',
 
-        'esri/config',
+        // 'esri/config',
 
 
-        'dojo/domReady!'
+        // 'dojo/domReady!'
     ],
 
     function (
-        $,
+        // $,
 
-        App,
+        // App,
 
-        lang,
-        dom,
+        // lang,
+        // dom,
 
-        esriConfig
+        // esriConfig
         ) {
         // force api to use CORS on mapserv thus removing the test request on app load
         // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
-        esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
+        // esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
 
-        // don't initialize if this is the jasmine test runner
-        if (!lang.getObject('dojoConfig.isJasmineTestRunner')) {
-            var app = new App({}, dom.byId('appDiv'));
-            app.startup();
-        }
+        // // don't initialize if this is the jasmine test runner
+        // if (!lang.getObject('dojoConfig.isJasmineTestRunner')) {
+        //     var app = new App({}, dom.byId('appDiv'));
+        //     app.startup();
+        // }
     });
 })();

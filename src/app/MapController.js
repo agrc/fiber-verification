@@ -1,261 +1,254 @@
-define([
-    'dojo/_base/lang',
-    'dojo/_base/array',
-    'dojo/_base/Color',
+define({});
+// define([
+//     'dojo/_base/lang',
+//     'dojo/_base/array',
 
-    'dojo/dom-construct',
+//     'dojo/topic',
+//     'dojo/string',
 
-    'dojo/topic',
-    'dojo/string',
+//     'esri/graphic',
 
-    'esri/graphic',
-    'esri/lang',
+//     'esri/layers/ArcGISDynamicMapServiceLayer',
+//     'esri/layers/ArcGISTiledMapServiceLayer',
+//     'esri/layers/FeatureLayer',
+//     'esri/SpatialReference',
+//     'esri/layers/QueryDataSource',
+//     'esri/layers/LayerDataSource',
 
-    'esri/layers/ArcGISDynamicMapServiceLayer',
-    'esri/layers/ArcGISTiledMapServiceLayer',
-    'esri/layers/FeatureLayer',
-    'esri/SpatialReference',
-    'esri/layers/QueryDataSource',
-    'esri/layers/LayerDataSource',
+//     'esri/toolbars/draw',
+//     'esri/tasks/query',
 
-    'esri/toolbars/draw',
-    'esri/tasks/Query',
+//     'agrc/widgets/map/BaseMap',
+//     'agrc/widgets/map/BaseMapSelector',
 
-    'agrc/widgets/map/BaseMap',
-    'agrc/widgets/map/BaseMapSelector',
+//     './config'
+// ], function(
+//     lang,
+//     array,
 
-    './config'
-], function(
-    lang,
-    array,
-    Color,
+//     topic,
+//     dojoString,
 
-    domConstruct,
+//     Graphic,
 
-    topic,
-    dojoString,
+//     ArcGISDynamicMapServiceLayer,
+//     ArcGISTiledMapServiceLayer,
+//     FeatureLayer,
+//     SpatialReference,
+//     QueryDataSource,
+//     LayerDataSource,
 
-    Graphic,
-    esriLang,
+//     Draw,
+//     Query,
 
-    ArcGISDynamicMapServiceLayer,
-    ArcGISTiledMapServiceLayer,
-    FeatureLayer,
-    SpatialReference,
-    QueryDataSource,
-    LayerDataSource,
+//     BaseMap,
+//     BaseMapSelector,
 
-    Draw,
-    Query,
+//     config
+// ) {
+//     return {
+//         // description:
+//         //      Handles interaction between app widgets and the map. Mostly through pub/sub
 
-    BaseMap,
-    BaseMapSelector,
+//         // handles: Object[]
+//         //      container to track handles for this object
+//         handles: [],
 
-    config
-) {
-    return {
-        // description:
-        //      Handles interaction between app widgets and the map. Mostly through pub/sub
+//         // childWidgets: array
+//         // summary:
+//         //      holds child widgets
+//         childWidgets: null,
 
-        // handles: Object[]
-        //      container to track handles for this object
-        handles: [],
+//         // map: agrc/widgets/map/BaseMap
+//         map: null,
 
-        // childWidgets: array
-        // summary:
-        //      holds child widgets 
-        childWidgets: null,
+//         // toolbar: Draw
+//         //      draw toolbar
+//         toolbar: null,
 
-        // map: agrc/widgets/map/BaseMap
-        map: null,
+//         // layers: Layer[]
+//         //      The collection of layers added with addLayerAndMakeVisible
+//         layers: null,
 
-        // toolbar: Draw
-        //      draw toolbar
-        toolbar: null,
+//         // Properties to be sent into constructor
+//         // mapDiv: Dom Node
+//         mapDiv: null,
 
-        // layers: Layer[]
-        //      The collection of layers added with addLayerAndMakeVisible
-        layers: null,
+//         init: function(params) {
+//             // summary:
+//             //      description
+//             console.log('app.MapController::init', arguments);
 
-        // Properties to be sent into constructor
-        // mapDiv: Dom Node
-        mapDiv: null,
+//             lang.mixin(this, params);
 
-        init: function(params) {
-            // summary:
-            //      description
-            console.log('app.MapController::init', arguments);
+//             this.childWidgets = [];
 
-            lang.mixin(this, params);
+//             this.map = new BaseMap(this.mapDiv, {
+//                 useDefaultBaseMap: false,
+//                 showAttribution: false
+//             });
 
-            this.childWidgets = [];
+//             this.childWidgets.push(
+//                 new BaseMapSelector({
+//                     map: this.map,
+//                     id: 'claro',
+//                     position: 'TR',
+//                     defaultThemeLabel: 'Lite'
+//                 })
+//             );
 
-            this.map = new BaseMap(this.mapDiv, {
-                useDefaultBaseMap: false,
-                showAttribution: false
-            });
+//             this.layers = {};
 
-            this.childWidgets.push(
-                new BaseMapSelector({
-                    map: this.map,
-                    id: 'claro',
-                    position: 'TR',
-                    defaultThemeLabel: 'Lite'
-                })
-            );
+//             this.setUpSubscribes();
+//         },
+//         setUpSubscribes: function() {
+//             // summary:
+//             //      subscribes to topics
+//             console.log('app.MapController::setUpSubscribes', arguments);
 
-            this.layers = {};
+//             this.handles.push(
+//                 topic.subscribe(config.topics.map.enableLayer,
+//                     lang.hitch(this, 'addLayerAndMakeVisible')),
+//                 topic.subscribe(config.topics.selectionTools.activateTool,
+//                     lang.hitch(this, 'activateTool'))
+//             );
+//         },
+//         addLayerAndMakeVisible: function(props) {
+//             // summary:
+//             //      description
+//             // props: object
+//             //  { url, serviceType, layerIndex, layerProps }
+//             console.log('app.MapController::addLayerAndMakeVisible', arguments);
 
-            this.setUpSubscribes();
-        },
-        setUpSubscribes: function() {
-            // summary:
-            //      subscribes to topics
-            console.log('app.MapController::setUpSubscribes', arguments);
+//             // check to see if layer has already been added to the map
+//             var lyr;
+//             var LayerClass;
 
-            this.handles.push(
-                topic.subscribe(config.topics.map.enableLayer,
-                    lang.hitch(this, 'addLayerAndMakeVisible')),
-                topic.subscribe(config.topics.selectionTools.activateTool,
-                    lang.hitch(this, 'activateTool'))
-            );
-        },
-        addLayerAndMakeVisible: function(props) {
-            // summary:
-            //      description
-            // props: object
-            //  { url, serviceType, layerIndex, layerProps }
-            console.log('app.MapController::addLayerAndMakeVisible', arguments);
+//             switch (props.serviceType || 'dynamic') {
+//                 case 'provider':
+//                     {
+//                         LayerClass = FeatureLayer;
+//                         var queryDataSource = new QueryDataSource();
+//                         queryDataSource.workspaceId = config.workspaceId;
+//                         queryDataSource.query = dojoString.substitute(config.query, {
+//                             provName: config.user.agency,
+//                             ownerName: config.ownerName
+//                         });
+//                         queryDataSource.oidFields = ['OBJECTID'];
+//                         queryDataSource.geometryType = 'polygon';
+//                         queryDataSource.spatialReference = new SpatialReference({wkid: 26912});
 
-            // check to see if layer has already been added to the map
-            var lyr;
-            var LayerClass;
+//                         var layerDataSource = new LayerDataSource();
+//                         layerDataSource.dataSource = queryDataSource;
 
-            switch (props.serviceType || 'dynamic') {
-                case 'provider':
-                    {
-                        LayerClass = FeatureLayer;
-                        var queryDataSource = new QueryDataSource();
-                        queryDataSource.workspaceId = config.workspaceId;
-                        queryDataSource.query = dojoString.substitute(config.query, {
-                            provName: config.user.agency,
-                            ownerName: config.ownerName
-                        });
-                        queryDataSource.oidFields = ['OBJECTID'];
-                        queryDataSource.geometryType = 'polygon';
-                        queryDataSource.spatialReference = new SpatialReference({wkid: 26912});
+//                         props.layerProps = {
+//                             source: layerDataSource,
+//                             autoGeneralize: false
+//                         };
 
-                        var layerDataSource = new LayerDataSource();
-                        layerDataSource.dataSource = queryDataSource;
+//                         break;
+//                     }
+//                 case 'feature':
+//                     {
+//                         LayerClass = FeatureLayer;
+//                         break;
+//                     }
+//                 case 'tiled':
+//                     {
+//                         LayerClass = ArcGISTiledMapServiceLayer;
+//                         break;
+//                     }
+//                 default:
+//                     {
+//                         LayerClass = ArcGISDynamicMapServiceLayer;
+//                         break;
+//                     }
+//             }
 
-                        props.layerProps = {
-                            source: layerDataSource,
-                            autoGeneralize: false
-                        };
+//             lyr = new LayerClass(props.url, props.layerProps);
+//             if (props.postCreationCallback) {
+//                 props.postCreationCallback(lyr);
+//             }
 
-                        break;
-                    }
-                case 'feature':
-                    {
-                        LayerClass = FeatureLayer;
-                        break;
-                    }
-                case 'tiled':
-                    {
-                        LayerClass = ArcGISTiledMapServiceLayer;
-                        break;
-                    }
-                default:
-                    {
-                        LayerClass = ArcGISDynamicMapServiceLayer;
-                        break;
-                    }
-            }
+//             this.map.addLayer(lyr);
+//             this.map.addLoaderToLayer(lyr);
 
-            lyr = new LayerClass(props.url, props.layerProps);
-            if (props.postCreationCallback) {
-                props.postCreationCallback(lyr);
-            }
+//             this.layers[props.id] = lyr;
+//         },
+//         startup: function() {
+//             // summary:
+//             //      startup once app is attached to dom
+//             console.log('app.MapController::startup', arguments);
 
-            this.map.addLayer(lyr);
-            this.map.addLoaderToLayer(lyr);
+//             array.forEach(this.childWidgets, function(widget) {
+//                 widget.startup();
+//             }, this);
+//         },
+//         highlight: function(evt) {
+//             // summary:
+//             //      adds the clicked shape geometry to the graphics layer
+//             //      highlighting it
+//             // evt - mouse click event
+//             console.log('app.MapController::highlight', arguments);
 
-            this.layers[props.id] = lyr;
-        },
-        startup: function() {
-            // summary:
-            //      startup once app is attached to dom
-            console.log('app.MapController::startup', arguments);
+//             this.clearGraphic(this.graphic);
 
-            array.forEach(this.childWidgets, function(widget) {
-                widget.startup();
-            }, this);
-        },
-        highlight: function(evt) {
-            // summary:
-            //      adds the clicked shape geometry to the graphics layer
-            //      highlighting it
-            // evt - mouse click event
-            console.log('app.MapController::highlight', arguments);
+//             this.graphic = new Graphic(evt.graphic.geometry, this.symbol);
+//             this.map.graphics.add(this.graphic);
+//         },
+//         clearGraphic: function(graphic) {
+//             // summary:
+//             //      removes the graphic from the map
+//             // graphic
+//             console.log('app.MapController::clearGraphic', arguments);
 
-            this.clearGraphic(this.graphic);
+//             if (graphic) {
+//                 this.map.graphics.remove(graphic);
+//                 this.graphic = null;
+//             }
+//         },
+//         activateTool: function (geometryType) {
+//             // summary:
+//             //      activates tools on the drawing toolbar
+//             // geometryType: See Draw Constants
+//             console.log('app.MapController::activateTool', arguments);
 
-            this.graphic = new Graphic(evt.graphic.geometry, this.symbol);
-            this.map.graphics.add(this.graphic);
-        },
-        clearGraphic: function(graphic) {
-            // summary:
-            //      removes the graphic from the map
-            // graphic
-            console.log('app.MapController::clearGraphic', arguments);
+//             if (!this.toolbar) {
+//                 this.toolbar = new Draw(this.map);
 
-            if (graphic) {
-                this.map.graphics.remove(graphic);
-                this.graphic = null;
-            }
-        },
-        activateTool: function (geometryType) {
-            // summary:
-            //      activates tools on the drawing toolbar
-            // geometryType: See Draw Constants
-            console.log('app.MapController::activateTool', arguments);
-        
-            if (!this.toolbar) {
-                this.toolbar = new Draw(this.map);
+//                 this.handles.push(this.toolbar.on('draw-end', lang.hitch(this, 'selectFeatures')));
+//             }
 
-                this.handles.push(this.toolbar.on('draw-end', lang.hitch(this, 'selectFeatures')));
-            }
+//             if (geometryType === 'none') {
+//                 this.toolbar.deactivate();
+//             } else {
+//                 this.toolbar.activate(Draw[geometryType]);
+//             }
+//         },
+//         selectFeatures: function (evt) {
+//             // summary:
+//             //      selects feature in the select feature layer after
+//             //      the user completes a drawing
+//             // evt: draw-end event object
+//             console.log('app.MapController:selectFeatures', arguments);
 
-            if (geometryType === 'none') {
-                this.toolbar.deactivate();
-            } else {
-                this.toolbar.activate(Draw[geometryType]);
-            }
-        },
-        selectFeatures: function (evt) {
-            // summary:
-            //      selects feature in the select feature layer after
-            //      the user completes a drawing
-            // evt: draw-end event object
-            console.log('app.MapController:selectFeatures', arguments);
-        
-            var query = new Query();
-            query.geometry = evt.geometry;
+//             var query = new Query();
+//             query.geometry = evt.geometry;
 
-            this.layers[config.layerIds.selection].selectFeatures(query);
-        },
-        destroy: function() {
-            // summary:
-            //      destroys all handles
-            console.log('app.MapControl::destroy', arguments);
+//             this.layers[config.layerIds.selection].selectFeatures(query);
+//         },
+//         destroy: function() {
+//             // summary:
+//             //      destroys all handles
+//             console.log('app.MapControl::destroy', arguments);
 
-            array.forEach(this.handles, function(hand) {
-                hand.remove();
-            });
+//             array.forEach(this.handles, function(hand) {
+//                 hand.remove();
+//             });
 
-            array.forEach(this.childWidgets, function(widget) {
-                widget.destroy();
-            }, this);
-        }
-    };
-});
+//             array.forEach(this.childWidgets, function(widget) {
+//                 widget.destroy();
+//             }, this);
+//         }
+//     };
+// });

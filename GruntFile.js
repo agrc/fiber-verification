@@ -15,15 +15,6 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         jasmine: {
-            // for embedded map projects...
-            // app: {
-            //   src: ['src/EmbeddedMapLoader.js'],
-            //   options: {
-            //     specs: ['src/app/tests/spec/*.js']
-            //   }
-            // }
-
-            // for regular apps...
             'default': {
                 src: ['src/app/run.js'],
                 options: {
@@ -60,13 +51,13 @@ module.exports = function(grunt) {
         dojo: {
             prod: {
                 options: {
-                    // You can also specify options to be used in all your tasks                
+                    // You can also specify options to be used in all your tasks
                     profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js'] // Profile for build
                 }
             },
             stage: {
                 options: {
-                    // You can also specify options to be used in all your tasks                
+                    // You can also specify options to be used in all your tasks
                     profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js'] // Profile for build
                 }
             },
@@ -122,8 +113,19 @@ module.exports = function(grunt) {
                     dest: '/'
                 }]
             }
+        },
+        amdcheck: {
+            dev: {
+                options: {
+                    removeUnusedDependencies: false
+                },
+                files: [{
+                    src: [
+                        'src/app/**/*.js'
+                    ]
+                }]
+            }
         }
- 
     });
 
     // Register tasks.
@@ -138,15 +140,38 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-processhtml');
     grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-amdcheck');
+    grunt.loadNpmTasks('grunt-newer');
 
     // Default task.
-    grunt.registerTask('default', ['jasmine:default:build', 'jshint', 'connect', 'watch']);
-    grunt.registerTask('build', ['clean', 'dojo:prod', 'imagemin:dynamic', 'copy', 'processhtml:dist', 'compress']);
-    grunt.registerTask('stage-build', ['clean',
+    grunt.registerTask('default', [
+        'jshint',
+        'amdcheck',
+        'newer:esri_slurp',
+        'jasmine:default:build',
+        'connect',
+        'watch'
+    ]);
+    grunt.registerTask('build', [
+        'clean',
+        'dojo:prod',
+        'imagemin:dynamic',
+        'copy',
+        'processhtml:dist',
+        'compress'
+    ]);
+    grunt.registerTask('stage-build', [
+        'clean',
         'dojo:stage',
         'imagemin:dynamic',
         'copy',
         'processhtml:dist',
-        'compress']);
-    grunt.registerTask('travis', ['esri_slurp', 'jshint', 'connect', 'jasmine:default']);
+        'compress'
+    ]);
+    grunt.registerTask('travis', [
+        'newer:esri_slurp',
+        'jshint',
+        'connect',
+        'jasmine:default'
+    ]);
 };
