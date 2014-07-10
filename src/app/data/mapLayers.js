@@ -63,6 +63,12 @@ define([
                 topic.publish(config.topics.map.selectedFeatureClicked, evt.mapPoint);
                 evt.stopPropagation();
             });
+            lyr.on('selection-complete', function (evt) {
+                topic.publish(config.topics.map.featuresSelected, evt.features);
+            });
+            topic.subscribe(config.topics.map.clearSelection, function () {
+                lyr.clearSelection();
+            });
         }
     }];
 });

@@ -1,0 +1,9 @@
+.editor .info {
+    height: 34px;
+    margin: 7px;
+    line-height: 33px;
+    color: white;
+}
+.editor .nav-item {
+    margin: 7px;
+}

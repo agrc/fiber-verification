@@ -6,6 +6,7 @@
 @import'../../agrc/resources/locate/MagicZoom.css';
 @import'../../ijit/resources/authentication/LoginRegister.css'; 
 @import'SelectionTools.css';
+@import'Editor.css';
 
 body, html, .app {
     width: 100%;
@@ -65,9 +66,6 @@ body, html, .app {
 }
 
 /* Button Services */
-.service-types{
-    margin-top: 7px;
-}
 /* Legend */
 .legend{
     color: #fff;
