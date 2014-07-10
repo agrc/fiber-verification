@@ -17,10 +17,9 @@ define([
     'esri/SpatialReference',
     'esri/layers/QueryDataSource',
     'esri/layers/LayerDataSource',
-    'esri/renderers/UniqueValueRenderer',
-    'esri/renderers/ScaleDependentRenderer',
 
-    'esri/symbols/SimpleLineSymbol',
+    'esri/toolbars/draw',
+    'esri/tasks/Query',
 
     'agrc/widgets/map/BaseMap',
     'agrc/widgets/map/BaseMapSelector',
@@ -45,10 +44,9 @@ define([
     SpatialReference,
     QueryDataSource,
     LayerDataSource,
-    UniqueValueRenderer,
-    ScaleDependentRenderer,
 
-    LineSymbol,
+    Draw,
+    Query,
 
     BaseMap,
     BaseMapSelector,
@@ -68,9 +66,20 @@ define([
         //      holds child widgets 
         childWidgets: null,
 
-        // Properties to be sent into constructor
         // map: agrc/widgets/map/BaseMap
         map: null,
+
+        // toolbar: Draw
+        //      draw toolbar
+        toolbar: null,
+
+        // layers: Layer[]
+        //      The collection of layers added with addLayerAndMakeVisible
+        layers: null,
+
+        // Properties to be sent into constructor
+        // mapDiv: Dom Node
+        mapDiv: null,
 
         init: function(params) {
             // summary:
@@ -95,9 +104,7 @@ define([
                 })
             );
 
-            this.symbol = new LineSymbol(LineSymbol.STYLE_SOLID, new Color('#F012BE'), 3);
-
-            this.layers = [];
+            this.layers = {};
 
             this.setUpSubscribes();
         },
@@ -108,7 +115,9 @@ define([
 
             this.handles.push(
                 topic.subscribe(config.topics.map.enableLayer,
-                    lang.hitch(this, 'addLayerAndMakeVisible'))
+                    lang.hitch(this, 'addLayerAndMakeVisible')),
+                topic.subscribe(config.topics.selectionTools.activateTool,
+                    lang.hitch(this, 'activateTool'))
             );
         },
         addLayerAndMakeVisible: function(props) {
@@ -164,27 +173,14 @@ define([
             }
 
             lyr = new LayerClass(props.url, props.layerProps);
-
-            if (props.serviceType === 'provider') {
-                var scaleRenderer = new ScaleDependentRenderer({
-                    rendererInfos: [{
-                        renderer: new UniqueValueRenderer(config.renderers.fine),
-                        minScale: config.renderers.maxScaleForCoarse
-                    },{
-                        renderer: new UniqueValueRenderer(config.renderers.coarse),
-                        maxScale: config.renderers.maxScaleForCoarse
-                    }]
-                });
-                lyr.setRenderer(scaleRenderer);
+            if (props.postCreationCallback) {
+                props.postCreationCallback(lyr);
             }
 
             this.map.addLayer(lyr);
             this.map.addLoaderToLayer(lyr);
 
-            this.layers.push({
-                id: props.id,
-                layer: lyr
-            });
+            this.layers[props.id] = lyr;
         },
         startup: function() {
             // summary:
@@ -217,6 +213,36 @@ define([
                 this.map.graphics.remove(graphic);
                 this.graphic = null;
             }
+        },
+        activateTool: function (geometryType) {
+            // summary:
+            //      activates tools on the drawing toolbar
+            // geometryType: See Draw Constants
+            console.log('app.MapController::activateTool', arguments);
+        
+            if (!this.toolbar) {
+                this.toolbar = new Draw(this.map);
+
+                this.handles.push(this.toolbar.on('draw-end', lang.hitch(this, 'selectFeatures')));
+            }
+
+            if (geometryType === 'none') {
+                this.toolbar.deactivate();
+            } else {
+                this.toolbar.activate(Draw[geometryType]);
+            }
+        },
+        selectFeatures: function (evt) {
+            // summary:
+            //      selects feature in the select feature layer after
+            //      the user completes a drawing
+            // evt: draw-end event object
+            console.log('app.MapController:selectFeatures', arguments);
+        
+            var query = new Query();
+            query.geometry = evt.geometry;
+
+            this.layers[config.layerIds.selection].selectFeatures(query);
         },
         destroy: function() {
             // summary:

@@ -142,6 +142,11 @@ module.exports = function(grunt) {
     // Default task.
     grunt.registerTask('default', ['jasmine:default:build', 'jshint', 'connect', 'watch']);
     grunt.registerTask('build', ['clean', 'dojo:prod', 'imagemin:dynamic', 'copy', 'processhtml:dist', 'compress']);
-    grunt.registerTask('stage-build', ['clean', 'dojo:stage', 'imagemin:dynamic', 'copy', 'processhtml:dist', 'compress']);
+    grunt.registerTask('stage-build', ['clean',
+        'dojo:stage',
+        'imagemin:dynamic',
+        'copy',
+        'processhtml:dist',
+        'compress']);
     grunt.registerTask('travis', ['esri_slurp', 'jshint', 'connect', 'jasmine:default']);
 };
