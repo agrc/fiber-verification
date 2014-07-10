@@ -48,7 +48,8 @@ define([
         serviceType: 'feature',
         layerProps: {
             autoGeneralize: false,
-            mode: FeatureLayer.MODE_SELECTION
+            mode: FeatureLayer.MODE_SELECTION,
+            outFields: [config.fieldNames.HexID]
         },
         id: config.layerIds.selection,
         postCreationCallback: function (lyr) {

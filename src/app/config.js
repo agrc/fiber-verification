@@ -33,7 +33,9 @@ define(['dojo/has'], function (has) {
                 click: 'app.map.click',
                 featuresSelected: 'app.map.featuresSelected',
                 clearSelection: 'app.map.clearSelection',
-                selectedFeatureClicked: 'app.map.selectedFeatureClicked'
+                selectedFeatureClicked: 'app.map.selectedFeatureClicked',
+                refreshProvider: 'app.map.refreshProvider'
+
             },
             selectionTools: {
                 activateTool: 'app.selectionTools.activateTool'
@@ -47,7 +49,8 @@ define(['dojo/has'], function (has) {
         urls: {
             search: 'http://api.mapserv.utah.gov/api/v1/search/{0}/{1}',
             vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer',
-            mapService: '/arcgis/rest/services/FiberVerification/MapServer'
+            mapService: '/arcgis/rest/services/FiberVerification/MapServer',
+            editApi: '../api/edit'
         },
 
         query:
@@ -62,7 +65,8 @@ define(['dojo/has'], function (has) {
         workspaceId: 'FiberVerification',
 
         fieldNames: {
-            ProvName: 'ProvName'
+            ProvName: 'ProvName',
+            HexID: 'HexID'
         },
 
         appName: 'fiberverification',

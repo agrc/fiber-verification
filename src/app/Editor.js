@@ -3,7 +3,11 @@ define([
 
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
+
     'dojo/topic',
+    'dojo/request',
+
     'dojo/dom-class',
 
     'dijit/_WidgetBase',
@@ -16,7 +20,11 @@ define([
 
     declare,
     lang,
+    array,
+
     topic,
+    xhr,
+
     domClass,
 
     _WidgetBase,
@@ -63,6 +71,10 @@ define([
             console.log('app.Editor::onFeaturesSelected', arguments);
 
             this.toggle(true);
+
+            this.honeyComb = array.map(features, function(graphic){
+                return graphic.attributes[config.fieldNames.HexID];
+            });
         },
         toggle: function (open) {
             // summary:
@@ -77,6 +89,38 @@ define([
                 domClass.remove(this.domNode, from);
                 domClass.add(this.domNode, to);
             }
+        },
+        submit: function(evt) {
+            // summary:
+            //      sends the id's off to the editing api
+            // evt: click event on a button
+            console.log('app.Editor::submit', arguments);
+
+            var data = {
+                role: config.user.role,
+                token: config.user.token,
+                provider: config.user.agency,
+                coverage: evt.target.value,
+                honeyComb: this.honeyComb
+            };
+
+            var params = {
+                data: JSON.stringify(data),
+                handleAs: 'json',
+                headers: {
+                    // remove the pre-flight request which breaks the request
+                    // ref: http://www.sitepen.com/blog/2014/01/15/faq-cors-with-dojo/
+                    'X-Requested-With': null,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            var self = this;
+            xhr.post(config.urls.editApi, params).then(function(){
+                self.cancel();
+                topic.publish(config.map.refreshProvider);
+            });
         },
         cancel: function () {
             // summary:
