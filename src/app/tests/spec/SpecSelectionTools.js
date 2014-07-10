@@ -1,5 +1,6 @@
 require([
     'app/SelectionTools',
+    'app/MapController',
 
     'dojo/_base/window',
     'dojo/query',
@@ -8,6 +9,7 @@ require([
     'dojo/dom-class'
 ], function(
     WidgetUnderTest,
+    MapController,
 
     win,
     query,
@@ -25,6 +27,7 @@ require([
         beforeEach(function() {
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, win.body()));
             widget.startup();
+            spyOn(MapController, 'activateTool');
         });
 
         afterEach(function() {

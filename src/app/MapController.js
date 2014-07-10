@@ -4,6 +4,7 @@ define([
 
     'dojo/topic',
     'dojo/string',
+    'dojo/dom-construct',
 
     'esri/graphic',
 
@@ -27,6 +28,7 @@ define([
 
     topic,
     dojoString,
+    domConstruct,
 
     Graphic,
 
@@ -69,7 +71,12 @@ define([
         //      The collection of layers added with addLayerAndMakeVisible
         layers: null,
 
-        // Properties to be sent into constructor
+        // toolActive: Boolean
+        //      Used to track if there is an active tool for the map
+        toolActive: null,
+
+
+        // Properties to be sent into init
         // mapDiv: Dom Node
         mapDiv: null,
 
@@ -86,6 +93,10 @@ define([
                 useDefaultBaseMap: false,
                 showAttribution: false
             });
+            this.handles.push(
+                this.map.on('click', lang.hitch(this, 'onMapClick'))
+            );
+            config.map = this.map;
 
             this.childWidgets.push(
                 new BaseMapSelector({
@@ -109,7 +120,9 @@ define([
                 topic.subscribe(config.topics.map.enableLayer,
                     lang.hitch(this, 'addLayerAndMakeVisible')),
                 topic.subscribe(config.topics.selectionTools.activateTool,
-                    lang.hitch(this, 'activateTool'))
+                    lang.hitch(this, 'activateTool')),
+                topic.subscribe(config.topics.map.selectedFeatureClicked,
+                    lang.hitch(this, 'onSelectedFeatureClick'))
             );
         },
         addLayerAndMakeVisible: function(props) {
@@ -183,29 +196,6 @@ define([
                 widget.startup();
             }, this);
         },
-        highlight: function(evt) {
-            // summary:
-            //      adds the clicked shape geometry to the graphics layer
-            //      highlighting it
-            // evt - mouse click event
-            console.log('app.MapController::highlight', arguments);
-
-            this.clearGraphic(this.graphic);
-
-            this.graphic = new Graphic(evt.graphic.geometry, this.symbol);
-            this.map.graphics.add(this.graphic);
-        },
-        clearGraphic: function(graphic) {
-            // summary:
-            //      removes the graphic from the map
-            // graphic
-            console.log('app.MapController::clearGraphic', arguments);
-
-            if (graphic) {
-                this.map.graphics.remove(graphic);
-                this.graphic = null;
-            }
-        },
         activateTool: function (geometryType) {
             // summary:
             //      activates tools on the drawing toolbar
@@ -215,31 +205,59 @@ define([
             if (!this.toolbar) {
                 this.toolbar = new Draw(this.map);
 
-                this.handles.push(this.toolbar.on('draw-end', lang.hitch(this, 'selectFeatures')));
+                var that = this;
+                this.handles.push(this.toolbar.on('draw-end', function (evt) {
+                    that.selectFeatures(evt.geometry);
+                }));
             }
 
             if (geometryType === 'none') {
                 this.toolbar.deactivate();
+                this.toolActive = false;
             } else {
                 this.toolbar.activate(Draw[geometryType]);
+                this.toolActive = true;
             }
         },
-        selectFeatures: function (evt) {
+        onMapClick: function (evt) {
+            // summary:
+            //      fires when the user clicks on the map
+            //      if no draw tool is selected then it selects or deselects the
+            //      clicked hexagon
+            // evt: Map Click Event Object
+            console.log('app.MapController::onMapClick', arguments);
+
+            if (!this.toolActive) {
+                this.selectFeatures(evt.mapPoint);
+            }
+        },
+        onSelectedFeatureClick: function (mapPoint) {
+            // summary:
+            //      removes clicked feature from selection
+            // mapPoint: Object
+            console.log('app.MapController::onSelectedFeatureClick', arguments);
+
+            this.selectFeatures(mapPoint, true);
+        },
+        selectFeatures: function (geometry, subtract) {
             // summary:
             //      selects feature in the select feature layer after
             //      the user completes a drawing
-            // evt: draw-end event object
+            // geometry: Geometry
+            // subtract: Boolean (optional)
             console.log('app.MapController:selectFeatures', arguments);
 
             var query = new Query();
-            query.geometry = evt.geometry;
+            query.geometry = geometry;
 
-            this.layers[config.layerIds.selection].selectFeatures(query);
+            var type = (subtract) ? FeatureLayer.SELECTION_SUBTRACT : FeatureLayer.SELECTION_ADD;
+
+            this.layers[config.layerIds.selection].selectFeatures(query, type);
         },
         destroy: function() {
             // summary:
             //      destroys all handles
-            console.log('app.MapControl::destroy', arguments);
+            console.log('app.MapController::destroy', arguments);
 
             array.forEach(this.handles, function(hand) {
                 hand.remove();
@@ -248,6 +266,9 @@ define([
             array.forEach(this.childWidgets, function(widget) {
                 widget.destroy();
             }, this);
+
+            this.map.destroy();
+            domConstruct.destroy(this.mapDiv);
         }
     };
 });
