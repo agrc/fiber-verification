@@ -26,7 +26,6 @@ namespace Containers {
             get { return Error == null; }
         }
 
-
         /// <summary>
         /// Response Container handles ETL just ignore
         /// the SOE Error

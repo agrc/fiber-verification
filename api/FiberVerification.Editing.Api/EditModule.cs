@@ -15,7 +15,7 @@ namespace FiberVerification.Editing.Api
 
     public class EditModule : NancyModule
     {
-        public EditModule(IConfigurable config) : base("/api")
+        public EditModule(IConfigurable config)
         {
             Post["/edit", true] = async (_, ctx) =>
                 {
