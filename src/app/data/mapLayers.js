@@ -39,6 +39,9 @@ define([
                 }]
             });
             lyr.setRenderer(scaleRenderer);
+            topic.subscribe(config.topics.map.refreshProvider, function () {
+                lyr.refresh();
+            });
         }
     }, {
         url: config.urls.mapService,
@@ -48,7 +51,8 @@ define([
         serviceType: 'feature',
         layerProps: {
             autoGeneralize: false,
-            mode: FeatureLayer.MODE_SELECTION
+            mode: FeatureLayer.MODE_SELECTION,
+            outFields: [config.fieldNames.HexID]
         },
         id: config.layerIds.selection,
         postCreationCallback: function (lyr) {
@@ -62,6 +66,12 @@ define([
                 console.log(evt);
                 topic.publish(config.topics.map.selectedFeatureClicked, evt.mapPoint);
                 evt.stopPropagation();
+            });
+            lyr.on('selection-complete', function (evt) {
+                topic.publish(config.topics.map.featuresSelected, evt.target.getSelectedFeatures());
+            });
+            topic.subscribe(config.topics.map.clearSelection, function () {
+                lyr.clearSelection();
             });
         }
     }];

@@ -2,6 +2,8 @@
 *.sublime-workspace
 .DS_Store
 .grunt/
+api/FiberVerification.Editing.Api/.nuget/
+api/FiberVerification.Editing.Api/Web.config
 deploy/fiberVerification.zip
 dist/
 node_modules/

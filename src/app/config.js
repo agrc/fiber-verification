@@ -31,7 +31,11 @@ define(['dojo/has'], function (has) {
             map: {
                 enableLayer: 'app.addLayer',
                 click: 'app.map.click',
-                selectedFeatureClicked: 'app.map.selectedFeatureClicked'
+                featuresSelected: 'app.map.featuresSelected',
+                clearSelection: 'app.map.clearSelection',
+                selectedFeatureClicked: 'app.map.selectedFeatureClicked',
+                refreshProvider: 'app.map.refreshProvider'
+
             },
             selectionTools: {
                 activateTool: 'app.selectionTools.activateTool'
@@ -45,14 +49,15 @@ define(['dojo/has'], function (has) {
         urls: {
             search: 'http://api.mapserv.utah.gov/api/v1/search/{0}/{1}',
             vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer',
-            mapService: '/arcgis/rest/services/FiberVerification/MapServer'
+            mapService: '/arcgis/rest/services/FiberVerification/MapServer',
+            editApi: '/fiberverificationapi/edit'
         },
 
         query:
             'SELECT h.HexID, h.OBJECTID, h.SHAPE, psa.ProvName, psa.ServiceClass ' +
             'FROM FiberVerification.${ownerName}.HEXAGONS as h ' +
             'INNER JOIN ( ' +
-                'SELECT HexID, ProvName, ServiceClass from FiberVerification.${ownerName}.PROVIDERSERVICEAREAS ' +
+                'SELECT HexID, ProvName, ServiceClass from FiberVerification.${ownerName}.SERVICEAREAS ' +
                 'WHERE ProvName = \'${provName}\' ' +
                 ') as psa ' +
             'ON psa.HexID = h.HexID',
@@ -60,7 +65,8 @@ define(['dojo/has'], function (has) {
         workspaceId: 'FiberVerification',
 
         fieldNames: {
-            ProvName: 'ProvName'
+            ProvName: 'ProvName',
+            HexID: 'HexID'
         },
 
         appName: 'fiberverification',
@@ -115,6 +121,15 @@ define(['dojo/has'], function (has) {
                     value: '9',
                     label: '9',
                     description: ''
+                }, {
+                    symbol: {
+                        type: 'esriSFS',
+                        style: 'esriSFSNull',
+                        color: [0, 0, 0, 255]
+                    },
+                    value: '0',
+                    label: '0',
+                    description: ''
                 }]
             },
             coarse: {
@@ -164,6 +179,15 @@ define(['dojo/has'], function (has) {
                     },
                     value: '9',
                     label: '9',
+                    description: ''
+                }, {
+                    symbol: {
+                        type: 'esriSFS',
+                        style: 'esriSFSNull',
+                        color: [0, 0, 0, 255]
+                    },
+                    value: '0',
+                    label: '0',
                     description: ''
                 }]
             }
