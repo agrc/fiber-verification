@@ -43,7 +43,8 @@ define(['dojo/has'], function (has) {
         },
 
         layerIds: {
-            selection: 'selection-layer'
+            selection: 'selection-layer',
+            provider: 'provider-layer'
         },
 
         urls: {

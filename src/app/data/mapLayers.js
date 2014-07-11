@@ -2,6 +2,7 @@ define([
     '../config',
     '../MapController',
 
+    'esri/geometry/Extent',
     'esri/layers/FeatureLayer',
 
     'esri/symbols/SimpleFillSymbol',
@@ -11,11 +12,13 @@ define([
     'esri/renderers/ScaleDependentRenderer',
 
     'dojo/_base/Color',
+    'dojo/_base/array',
     'dojo/topic'
 ], function (
     config,
     MapController,
 
+    Extent,
     FeatureLayer,
 
     SimpleFillSymbol,
@@ -25,6 +28,7 @@ define([
     ScaleDependentRenderer,
 
     Color,
+    array,
     topic
     ) {
     var layers = [{
@@ -50,10 +54,22 @@ define([
                     lyr.refresh();
                 }
             });
+            var h2 = lyr.on('update-end', function () {
+                h2.remove();
+
+                if (lyr.graphics.length) {
+                    var e = lyr.graphics[0].geometry.getExtent();
+                    array.forEach(lyr.graphics, function (g) {
+                        e = e.union(g.geometry.getExtent());
+                    });
+                    MapController.map.setExtent(e, true);
+                }
+            });
         },
         layerProps: {
             autoGeneralize: false
-        }
+        },
+        id: config.layerIds.provider
     }, {
         url: config.urls.mapService,
         serviceType: 'dynamic'
