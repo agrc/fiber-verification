@@ -31,7 +31,12 @@
                 location: 'bootstrap',
                 main: 'dist/js/bootstrap'
             }
-        ]
+        ],
+        map: {
+            'ijit': {
+                'ijit/widgets/authentication/_LoginRegisterRequestPane': 'app/_LoginRegisterRequestPane'
+            }
+        }
     };
     require(config, [
         'jquery',

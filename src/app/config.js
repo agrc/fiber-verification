@@ -66,7 +66,8 @@ define(['dojo/has'], function (has) {
 
         fieldNames: {
             ProvName: 'ProvName',
-            HexID: 'HexID'
+            HexID: 'HexID',
+            Code: 'Code'
         },
 
         appName: 'fiberverification',
