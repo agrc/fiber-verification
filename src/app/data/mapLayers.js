@@ -57,6 +57,7 @@ define([
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color('#F012BE'), 3),
                 new Color([85, 85, 85, 0.3])
             ));
+            lyr.setMinScale(0);
             lyr.on('click', function (evt) {
                 console.log(evt);
                 topic.publish(config.topics.map.selectedFeatureClicked, evt.mapPoint);
