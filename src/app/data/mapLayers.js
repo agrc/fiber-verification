@@ -39,6 +39,9 @@ define([
                 }]
             });
             lyr.setRenderer(scaleRenderer);
+            topic.subscribe(config.topics.map.refreshProvider, function () {
+                lyr.refresh();
+            });
         }
     }, {
         url: config.urls.mapService,
@@ -65,7 +68,7 @@ define([
                 evt.stopPropagation();
             });
             lyr.on('selection-complete', function (evt) {
-                topic.publish(config.topics.map.featuresSelected, evt.features);
+                topic.publish(config.topics.map.featuresSelected, evt.target.getSelectedFeatures());
             });
             topic.subscribe(config.topics.map.clearSelection, function () {
                 lyr.clearSelection();

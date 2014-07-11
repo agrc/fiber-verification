@@ -68,13 +68,19 @@ define([
             // summary:
             //      fires when the selection feature layer has completed selecting features
             // features: feature[]
+            //      all of the currently selected features
             console.log('app.Editor::onFeaturesSelected', arguments);
 
-            this.toggle(true);
+            if (features.length === 0) {
+                this.toggle(false);
+                this.honeyComb = [];
+            } else {
+                this.toggle(true);
 
-            this.honeyComb = array.map(features, function(graphic){
-                return graphic.attributes[config.fieldNames.HexID];
-            });
+                this.honeyComb = array.map(features, function(graphic){
+                    return graphic.attributes[config.fieldNames.HexID];
+                });
+            }
         },
         toggle: function (open) {
             // summary:
@@ -119,7 +125,7 @@ define([
             var self = this;
             xhr.post(config.urls.editApi, params).then(function(){
                 self.cancel();
-                topic.publish(config.map.refreshProvider);
+                topic.publish(config.topics.map.refreshProvider);
             });
         },
         cancel: function () {

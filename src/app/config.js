@@ -50,7 +50,7 @@ define(['dojo/has'], function (has) {
             search: 'http://api.mapserv.utah.gov/api/v1/search/{0}/{1}',
             vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer',
             mapService: '/arcgis/rest/services/FiberVerification/MapServer',
-            editApi: '../api/edit'
+            editApi: '/fiberverificationapi/edit'
         },
 
         query:
@@ -121,6 +121,15 @@ define(['dojo/has'], function (has) {
                     value: '9',
                     label: '9',
                     description: ''
+                }, {
+                    symbol: {
+                        type: 'esriSFS',
+                        style: 'esriSFSNull',
+                        color: [0, 0, 0, 255]
+                    },
+                    value: '0',
+                    label: '0',
+                    description: ''
                 }]
             },
             coarse: {
@@ -170,6 +179,15 @@ define(['dojo/has'], function (has) {
                     },
                     value: '9',
                     label: '9',
+                    description: ''
+                }, {
+                    symbol: {
+                        type: 'esriSFS',
+                        style: 'esriSFSNull',
+                        color: [0, 0, 0, 255]
+                    },
+                    value: '0',
+                    label: '0',
                     description: ''
                 }]
             }
