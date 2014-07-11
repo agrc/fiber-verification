@@ -1,10 +1,11 @@
 define([
-    './../config',
+    '../config',
+    '../MapController',
 
     'esri/layers/FeatureLayer',
 
     'esri/symbols/SimpleFillSymbol',
-    'esri/symbols/SimpleLineSymbol',
+    'esri/symbols/CartographicLineSymbol',
 
     'esri/renderers/UniqueValueRenderer',
     'esri/renderers/ScaleDependentRenderer',
@@ -13,11 +14,12 @@ define([
     'dojo/topic'
 ], function (
     config,
+    MapController,
 
     FeatureLayer,
 
     SimpleFillSymbol,
-    SimpleLineSymbol,
+    CartographicLineSymbol,
 
     UniqueValueRenderer,
     ScaleDependentRenderer,
@@ -25,7 +27,7 @@ define([
     Color,
     topic
     ) {
-    return [{
+    var layers = [{
         url: config.urls.mapService + '/dynamicLayer',
         serviceType: 'provider',
         postCreationCallback: function (lyr) {
@@ -39,9 +41,18 @@ define([
                 }]
             });
             lyr.setRenderer(scaleRenderer);
-            topic.subscribe(config.topics.map.refreshProvider, function () {
-                lyr.refresh();
+            var h = topic.subscribe(config.topics.map.refreshProvider, function () {
+                if (lyr.loadError) {
+                    h.remove();
+                    MapController.map.removeLayer(lyr);
+                    MapController.addLayerAndMakeVisible(layers[0]);
+                } else {
+                    lyr.refresh();
+                }
             });
+        },
+        layerProps: {
+            autoGeneralize: false
         }
     }, {
         url: config.urls.mapService,
@@ -58,7 +69,12 @@ define([
         postCreationCallback: function (lyr) {
             lyr.setSelectionSymbol(new SimpleFillSymbol(
                 SimpleFillSymbol.STYLE_SOLID,
-                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color('#F012BE'), 3),
+                new CartographicLineSymbol(
+                    CartographicLineSymbol.STYLE_SOLID,
+                    new Color('#F012BE'),
+                    3,
+                    CartographicLineSymbol.CAP_ROUND,
+                    CartographicLineSymbol.JOIN_ROUND),
                 new Color([85, 85, 85, 0.3])
             ));
             lyr.setMinScale(0);
@@ -75,4 +91,6 @@ define([
             });
         }
     }];
+
+    return layers;
 });
