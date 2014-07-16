@@ -7,9 +7,32 @@ module.exports = function(grunt) {
         'src/index.html',
         'src/ChangeLog.html'
     ];
+
     var gruntFile = 'GruntFile.js';
     var internFile = 'tests/intern.js';
     var jshintFiles = [jsFiles, gruntFile, internFile];
+    var browsers = [{
+        browserName: 'firefox',
+        platform: 'XP'
+    }, {
+        browserName: 'chrome',
+        platform: 'XP'
+    }, {
+        browserName: 'chrome',
+        platform: 'linux'
+    }, {
+        browserName: 'internet explorer',
+        platform: 'WIN8.1',
+        version: '11'
+    }, {
+        browserName: 'internet explorer',
+        platform: 'WIN8',
+        version: '10'
+    }, {
+        browserName: 'internet explorer',
+        platform: 'VISTA',
+        version: '9'
+    }];
 
     // Project configuration.
     grunt.initConfig({
@@ -48,7 +71,12 @@ module.exports = function(grunt) {
             }
         },
         connect: {
-            uses_defaults: {}
+            server: {
+                options: {
+                    base: '',
+                    port: 8000
+                }
+            }
         },
         dojo: {
             prod: {
@@ -127,23 +155,30 @@ module.exports = function(grunt) {
                     ]
                 }]
             }
+        },
+        'saucelabs-jasmine': {
+            all: {
+                options: {
+                    urls: ['http://localhost:8000/_SpecRunner.html'],
+                    tunnelTimeout: 5,
+                    /* jshint ignore:start */
+                    build: process.env.TRAVIS_JOB_ID,
+                    /* jshint ignore:end */
+                    concurrency: 6,
+                    browsers: browsers,
+                    testname: 'fiber-verification',
+                    tags: ['master']
+                }
+            }
         }
     });
 
-    // Register tasks.
-    grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-contrib-imagemin');
-    grunt.loadNpmTasks('grunt-dojo');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-esri-slurp');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-processhtml');
-    grunt.loadNpmTasks('grunt-contrib-compress');
-    grunt.loadNpmTasks('grunt-amdcheck');
-    grunt.loadNpmTasks('grunt-newer');
+    // Loading dependencies
+    for (var key in grunt.file.readJSON('package.json').devDependencies) {
+        if (key !== 'grunt' && key.indexOf('grunt') === 0) {
+            grunt.loadNpmTasks(key);
+        }
+    }
 
     // Default task.
     grunt.registerTask('default', [
@@ -153,6 +188,10 @@ module.exports = function(grunt) {
         'jasmine:default:build',
         'connect',
         'watch'
+    ]);
+    grunt.registerTask('sauce', [
+        'connect',
+        'saucelabs-jasmine'
     ]);
     grunt.registerTask('build', [
         'clean',
@@ -171,8 +210,8 @@ module.exports = function(grunt) {
         'compress'
     ]);
     grunt.registerTask('travis', [
-        'esri_slurp',
         'jshint',
+        'esri_slurp',
         'connect',
         'jasmine:default'
     ]);
