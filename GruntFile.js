@@ -213,6 +213,7 @@ module.exports = function(grunt) {
         'jshint',
         'esri_slurp',
         'connect',
+        'saucelabs-jasmine',
         'jasmine:default'
     ]);
 };
