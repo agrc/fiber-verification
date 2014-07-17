@@ -18,4 +18,4 @@ var dojoConfig = {
 
 // for jasmine-favicon-reporter
 jasmine.getEnv().addReporter(new JasmineFaviconReporter());
-jasmine.getEnv().addReporter(new jasmine.JSReporter());
+jasmine.getEnv().addReporter(new jasmine.JSReporter2());
