@@ -12,5 +12,7 @@
     "stubmodule": null,
     "util": "dojo-util#~1.9"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jasmine-jsreporter": "~0.1.2"
+  }
 }

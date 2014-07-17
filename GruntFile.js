@@ -34,6 +34,8 @@ module.exports = function(grunt) {
         version: '9'
     }];
 
+    var port = 9999;
+
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -43,12 +45,13 @@ module.exports = function(grunt) {
                 options: {
                     specs: ['src/app/**/Spec*.js'],
                     vendor: [
+                        'src/jasmine-jsreporter/jasmine-jsreporter.js',
                         'src/jasmine-favicon-reporter/vendor/favico.js',
                         'src/jasmine-favicon-reporter/jasmine-favicon-reporter.js',
                         'src/app/tests/jasmineTestBootstrap.js',
                         'src/dojo/dojo.js'
                     ],
-                    host: 'http://localhost:8000'
+                    host: 'http://127.0.0.1:' + port
                 }
             }
         },
@@ -74,7 +77,7 @@ module.exports = function(grunt) {
             server: {
                 options: {
                     base: '',
-                    port: 8000
+                    port: port
                 }
             }
         },
@@ -159,7 +162,7 @@ module.exports = function(grunt) {
         'saucelabs-jasmine': {
             all: {
                 options: {
-                    urls: ['http://localhost:8000/_SpecRunner.html'],
+                    urls: ['http://127.0.0.1:' + port + '/_SpecRunner.html'],
                     tunnelTimeout: 5,
                     /* jshint ignore:start */
                     build: process.env.TRAVIS_JOB_ID,

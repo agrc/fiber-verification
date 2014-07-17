@@ -20,3 +20,5 @@ src/jquery/
 src/spinjs
 src/stubmodule/
 src/util/
+src/components-jasmine
+src/jasmine-jsreporter
