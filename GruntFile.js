@@ -10,6 +10,11 @@ module.exports = function(grunt) {
     var gruntFile = 'GruntFile.js';
     var internFile = 'tests/intern.js';
     var jshintFiles = [jsFiles, gruntFile, internFile];
+    var bumpFiles = [
+        'package.json',
+        'bower.json',
+        'src/app/config.js'
+    ];
 
     // Project configuration.
     grunt.initConfig({
@@ -130,6 +135,13 @@ module.exports = function(grunt) {
                     ]
                 }]
             }
+        },
+        bump: {
+            options: {
+                files: bumpFiles,
+                commitFiles: bumpFiles,
+                pushTo: 'origin'
+            }
         }
     });
 
@@ -148,6 +160,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-amdcheck');
     grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-if-missing');
+    grunt.loadNpmTasks('grunt-bump');
 
     // Default task.
     grunt.registerTask('default', [
