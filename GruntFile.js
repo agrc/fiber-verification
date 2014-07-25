@@ -51,7 +51,10 @@ module.exports = function(grunt) {
                         'src/app/tests/jasmineTestBootstrap.js',
                         'src/dojo/dojo.js'
                     ],
-                    host: 'http://127.0.0.1:' + port
+                    host: 'http://127.0.0.1:' + port,
+                    sauceConfig: {
+                        'video-upload-on-pass': false
+                    }
                 }
             }
         },

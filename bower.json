@@ -7,12 +7,12 @@
     "dijit": "~1.9",
     "dojo": "~1.9",
     "dojox": "~1.9",
-    "ijit": "agrc-ijit#",
+    "ijit": "agrc-ijit#"
+  },
+  "devDependencies": {
+    "jasmine-jsreporter": "~0.1.2",
     "jasmine-favicon-reporter": "*",
     "stubmodule": null,
     "util": "dojo-util#~1.9"
-  },
-  "devDependencies": {
-    "jasmine-jsreporter": "~0.1.2"
   }
 }
