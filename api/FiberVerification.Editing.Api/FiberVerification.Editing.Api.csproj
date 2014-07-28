@@ -103,7 +103,11 @@
     <Content Include="connections.config" />
     <Content Include="connections.Release.config" />
     <Content Include="connections.Stage.config" />
+    <Content Include="connections.Scott.config" />
     <None Include="Properties\PublishProfiles\Stage.pubxml" />
+    <None Include="Web.Scott.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
     <None Include="Web.Stage.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -124,6 +128,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Scott|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

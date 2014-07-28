@@ -38,6 +38,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>containers.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Scott|AnyCPU'">
+    <OutputPath>bin\Scott\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\FiberVerification.Editing.Api\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
