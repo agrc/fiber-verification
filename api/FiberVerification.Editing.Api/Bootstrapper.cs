@@ -18,6 +18,8 @@ namespace FiberVerification.Editing.Api
 
             container.Register(typeof(JsonSerializer), typeof(JsonSerializerOptions));
             container.Register<IConfigurable>(new DevConfig());
+
+            StaticConfiguration.DisableErrorTraces = false;
         }
     }
 }

@@ -100,8 +100,11 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="packages.config" />
+    <Content Include="connections.config" />
+    <Content Include="connections.Release.config" />
+    <Content Include="connections.Stage.config" />
     <None Include="Properties\PublishProfiles\Stage.pubxml" />
-    <None Include="Web.Debug.config">
+    <None Include="Web.Stage.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
