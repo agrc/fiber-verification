@@ -35,6 +35,8 @@ define([
         url: config.urls.mapService + '/dynamicLayer',
         serviceType: 'provider',
         postCreationCallback: function (lyr) {
+            lyr.setDefinitionExpression('ProvName = \'' + config.user.agency + '\'');
+
             var scaleRenderer = new ScaleDependentRenderer({
                 rendererInfos: [{
                     renderer: new UniqueValueRenderer(config.renderers.fine),
@@ -67,7 +69,11 @@ define([
             });
         },
         layerProps: {
-            autoGeneralize: false
+            autoGeneralize: false,
+            outFields: [
+                config.workspaceId + '.' + config.ownerName + '.ServiceAreas.' + config.fieldNames.HexID,
+                config.workspaceId + '.' + config.ownerName + '.ServiceAreas.' + config.fieldNames.ServiceClass
+            ]
         },
         id: config.layerIds.provider
     }, {

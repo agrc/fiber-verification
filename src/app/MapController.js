@@ -12,8 +12,10 @@ define([
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
     'esri/SpatialReference',
-    'esri/layers/QueryDataSource',
+    'esri/layers/JoinDataSource',
     'esri/layers/LayerDataSource',
+    'esri/layers/TableDataSource',
+    'esri/layers/LayerMapSource',
 
     'esri/toolbars/draw',
     'esri/tasks/query',
@@ -36,8 +38,10 @@ define([
     ArcGISTiledMapServiceLayer,
     FeatureLayer,
     SpatialReference,
-    QueryDataSource,
+    JoinDataSource,
     LayerDataSource,
+    TableDataSource,
+    LayerMapSource,
 
     Draw,
     Query,
@@ -140,23 +144,37 @@ define([
                 case 'provider':
                     {
                         LayerClass = FeatureLayer;
-                        var queryDataSource = new QueryDataSource();
-                        queryDataSource.workspaceId = config.workspaceId;
-                        queryDataSource.query = dojoString.substitute(config.query, {
-                            provName: config.user.agency,
-                            ownerName: config.ownerName
-                        });
-                        queryDataSource.oidFields = ['OBJECTID'];
-                        queryDataSource.geometryType = 'polygon';
-                        queryDataSource.spatialReference = new SpatialReference({wkid: 26912});
 
+                        // build a valid datasource for the dynamic layer
+
+                        // Service Areas table
+                        var tableDataSource = new TableDataSource();
+                        tableDataSource.dataSourceName = 'FiberVerification.DBO.ServiceAreas';
+                        tableDataSource.gdbVersion = 'DBO.EDIT';
+                        tableDataSource.workspaceId = 'FiberVerification';
+                        var layerDataSource2 = new LayerDataSource();
+                        layerDataSource2.dataSource = tableDataSource;
+
+                        // Hexagons layer
+                        var layerMapSource = new LayerMapSource();
+                        layerMapSource.gdbVersion = 'DBO.EDIT';
+                        layerMapSource.mapLayerId = 0;
+
+                        // join them together
+                        var joinDataSource = new JoinDataSource();
+                        joinDataSource.joinType = 'right-inner-join';
+                        joinDataSource.leftTableKey = 'HexID';
+                        joinDataSource.leftTableSource = layerMapSource;
+                        joinDataSource.rightTableKey = 'HexID';
+                        joinDataSource.rightTableSource = layerDataSource2;
+
+                        // make it into a layer data source
                         var layerDataSource = new LayerDataSource();
-                        layerDataSource.dataSource = queryDataSource;
+                        layerDataSource.dataSource = joinDataSource;
 
-                        props.layerProps = {
-                            source: layerDataSource,
-                            autoGeneralize: false
-                        };
+                        props.layerProps = lang.mixin({
+                            source: layerDataSource
+                        }, props.layerProps);
 
                         break;
                     }
