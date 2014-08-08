@@ -50,8 +50,7 @@ define(['dojo/has'], function (has) {
         urls: {
             search: 'http://api.mapserv.utah.gov/api/v1/search/{0}/{1}',
             vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer',
-            mapService: '/arcgis/rest/services/FiberVerification/MapServer',
-            editApi: '/fiberavailabilitymap/api/edit'
+            mapService: '/arcgis/rest/services/FiberVerification/MapServer'
         },
 
         query:
@@ -200,14 +199,17 @@ define(['dojo/has'], function (has) {
         // mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-E7FEB434755864';
         window.AGRC.ownerName = 'FIBERADMIN';
+        window.AGRC.urls.editApi = 'api/edit';
     } else if (has('agrc-api-key') === 'stage') {
         // test.mapserv.utah.gov
         window.AGRC.apiKey = 'AGRC-FFCDAD6B933051';
         window.AGRC.ownerName = 'FIBERADMIN';
+        window.AGRC.urls.editApi = 'api/edit';
     } else {
         // localhost
         window.AGRC.apiKey = 'AGRC-B5D62BD2151902';
         window.AGRC.ownerName = 'DBO';
+        window.AGRC.urls.editApi = '/fiberverificationapi/edit';
     }
 
     return window.AGRC;
