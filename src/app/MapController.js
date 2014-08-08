@@ -79,6 +79,14 @@ define([
         //      Used to track if there is an active tool for the map
         toolActive: null,
 
+        // selectedFeatures: Features[]
+        //      The currently selected features
+        selectedFeatures: null,
+
+        // providerLayer: FeatureLayer
+        //      description
+        providerLayer: null,
+
 
         // Properties to be sent into init
         // mapDiv: Dom Node
@@ -120,13 +128,17 @@ define([
             //      subscribes to topics
             console.log('app.MapController::setUpSubscribes', arguments);
 
+            var that = this;
             this.handles.push(
                 topic.subscribe(config.topics.map.enableLayer,
                     lang.hitch(this, 'addLayerAndMakeVisible')),
                 topic.subscribe(config.topics.selectionTools.activateTool,
                     lang.hitch(this, 'activateTool')),
                 topic.subscribe(config.topics.map.selectedFeatureClicked,
-                    lang.hitch(this, 'onSelectedFeatureClick'))
+                    lang.hitch(this, 'onSelectedFeatureClick')),
+                topic.subscribe(config.topics.map.featuresSelected, function (features) {
+                    that.selectedFeatures = features;
+                })
             );
         },
         addLayerAndMakeVisible: function(props) {
@@ -287,6 +299,49 @@ define([
 
             this.map.destroy();
             domConstruct.destroy(this.mapDiv);
+        },
+        getHoneyComb: function (serviceType) {
+            // summary:
+            //      splits selected feature into adds and updates
+            // serviceType: String
+            console.log('app/MapController:getHoneyComb', arguments);
+
+            var fn = config.fieldNames;
+            var existingProviderHexagonIds = {};
+            array.forEach(this.providerLayer.graphics, function (g) {
+                existingProviderHexagonIds[g.attributes[fn.QualifiedHexID]] =
+                    g.attributes[fn.QualifiedServiceAreasOBJECTID];
+            });
+
+            var comb = {
+                adds: [],
+                updates: []
+            };
+
+            array.forEach(this.selectedFeatures, function (g) {
+                var hexId = g.attributes[fn.HexID];
+                var record;
+
+                if (hexId in existingProviderHexagonIds) {
+                    // updates
+                    record = {
+                        OBJECTID: existingProviderHexagonIds[hexId]
+                    };
+                    record[fn.ProvName] = config.user.agency;
+                    record[fn.HexID] = hexId;
+                    record[fn.ServiceClass] = parseInt(serviceType, 10);
+                    comb.updates.push({attributes: record});
+                } else {
+                    // adds
+                    record = {};
+                    record[fn.ProvName] = config.user.agency;
+                    record[fn.HexID] = hexId;
+                    record[fn.ServiceClass] = parseInt(serviceType, 10);
+                    comb.adds.push({attributes: record});
+                }
+            });
+
+            return comb;
         }
     };
 });

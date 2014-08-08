@@ -23,9 +23,12 @@ define(['dojo/has'], function (has) {
         gray: [255, 255, 255, 255]
     };
     var ServiceClass = 'ServiceClass';
+    var HexID = 'HexID';
     var baseService = '/arcgis/rest/services/FiberVerification/';
     var workspaceId = 'FiberVerification';
     var QualifiedServiceClass = workspaceId + '.' + ownerName + '.ServiceAreas.' + ServiceClass;
+    var QualifiedHexID = workspaceId + '.' + ownerName + '.ServiceAreas.' + HexID;
+    var QualifiedServiceAreasOBJECTID = workspaceId + '.' + ownerName + '.ServiceAreas.OBJECTID';
 
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
@@ -69,7 +72,7 @@ define(['dojo/has'], function (has) {
             search: 'http://api.mapserv.utah.gov/api/v1/search/{0}/{1}',
             vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer',
             mapService: baseService + 'MapServer',
-            featureService: baseService + 'FeatureServer'
+            applyEdits: baseService + 'FeatureServer/1/applyEdits'
         },
 
         workspaceId: workspaceId,
@@ -77,8 +80,11 @@ define(['dojo/has'], function (has) {
 
         fieldNames: {
             ProvName: 'ProvName',
-            HexID: 'HexID',
-            ServiceClass: ServiceClass
+            HexID: HexID,
+            ServiceClass: ServiceClass,
+            QualifiedServiceClass: QualifiedServiceClass,
+            QualifiedHexID: QualifiedHexID,
+            QualifiedServiceAreasOBJECTID: QualifiedServiceAreasOBJECTID
         },
 
         appName: 'fiberverification',
