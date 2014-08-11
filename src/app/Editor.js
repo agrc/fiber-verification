@@ -14,7 +14,8 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
 
-    './config'
+    './config',
+    './MapController'
 ], function(
     template,
 
@@ -31,7 +32,8 @@ define([
     _TemplatedMixin,
     _WidgetsInTemplateMixin,
 
-    config
+    config,
+    MapController
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // description:
@@ -73,13 +75,8 @@ define([
 
             if (features.length === 0) {
                 this.toggle(false);
-                this.honeyComb = [];
             } else {
                 this.toggle(true);
-
-                this.honeyComb = array.map(features, function(graphic){
-                    return graphic.attributes[config.fieldNames.HexID];
-                });
             }
         },
         toggle: function (open) {
@@ -102,28 +99,23 @@ define([
             // evt: click event on a button
             console.log('app.Editor::submit', arguments);
 
+            var coverage = evt.target.value;
+            var honeyComb = MapController.getHoneyComb(coverage);
+
             var data = {
-                role: config.user.role,
                 token: config.user.token,
-                provider: config.user.agency,
-                coverage: evt.target.value,
-                honeyComb: this.honeyComb
+                f: 'json',
+                adds: JSON.stringify(honeyComb.adds),
+                updates: JSON.stringify(honeyComb.updates)
             };
 
             var params = {
-                data: JSON.stringify(data),
-                handleAs: 'json',
-                headers: {
-                    // remove the pre-flight request which breaks the request
-                    // ref: http://www.sitepen.com/blog/2014/01/15/faq-cors-with-dojo/
-                    'X-Requested-With': null,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                }
+                data: data,
+                handleAs: 'json'
             };
 
             var self = this;
-            xhr.post(config.urls.editApi, params).then(function(){
+            xhr.post(config.urls.applyEdits, params).then(function(){
                 self.cancel();
                 topic.publish(config.topics.map.refreshProvider);
             });

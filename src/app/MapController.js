@@ -12,8 +12,10 @@ define([
     'esri/layers/ArcGISTiledMapServiceLayer',
     'esri/layers/FeatureLayer',
     'esri/SpatialReference',
-    'esri/layers/QueryDataSource',
+    'esri/layers/JoinDataSource',
     'esri/layers/LayerDataSource',
+    'esri/layers/TableDataSource',
+    'esri/layers/LayerMapSource',
 
     'esri/toolbars/draw',
     'esri/tasks/query',
@@ -36,8 +38,10 @@ define([
     ArcGISTiledMapServiceLayer,
     FeatureLayer,
     SpatialReference,
-    QueryDataSource,
+    JoinDataSource,
     LayerDataSource,
+    TableDataSource,
+    LayerMapSource,
 
     Draw,
     Query,
@@ -74,6 +78,14 @@ define([
         // toolActive: Boolean
         //      Used to track if there is an active tool for the map
         toolActive: null,
+
+        // selectedFeatures: Features[]
+        //      The currently selected features
+        selectedFeatures: null,
+
+        // providerLayer: FeatureLayer
+        //      description
+        providerLayer: null,
 
 
         // Properties to be sent into init
@@ -116,13 +128,17 @@ define([
             //      subscribes to topics
             console.log('app.MapController::setUpSubscribes', arguments);
 
+            var that = this;
             this.handles.push(
                 topic.subscribe(config.topics.map.enableLayer,
                     lang.hitch(this, 'addLayerAndMakeVisible')),
                 topic.subscribe(config.topics.selectionTools.activateTool,
                     lang.hitch(this, 'activateTool')),
                 topic.subscribe(config.topics.map.selectedFeatureClicked,
-                    lang.hitch(this, 'onSelectedFeatureClick'))
+                    lang.hitch(this, 'onSelectedFeatureClick')),
+                topic.subscribe(config.topics.map.featuresSelected, function (features) {
+                    that.selectedFeatures = features;
+                })
             );
         },
         addLayerAndMakeVisible: function(props) {
@@ -140,23 +156,37 @@ define([
                 case 'provider':
                     {
                         LayerClass = FeatureLayer;
-                        var queryDataSource = new QueryDataSource();
-                        queryDataSource.workspaceId = config.workspaceId;
-                        queryDataSource.query = dojoString.substitute(config.query, {
-                            provName: config.user.agency,
-                            ownerName: config.ownerName
-                        });
-                        queryDataSource.oidFields = ['OBJECTID'];
-                        queryDataSource.geometryType = 'polygon';
-                        queryDataSource.spatialReference = new SpatialReference({wkid: 26912});
 
+                        // build a valid datasource for the dynamic layer
+
+                        // Service Areas table
+                        var tableDataSource = new TableDataSource();
+                        tableDataSource.dataSourceName = 'FiberVerification.DBO.ServiceAreas';
+                        tableDataSource.gdbVersion = 'DBO.EDIT';
+                        tableDataSource.workspaceId = 'FiberVerification';
+                        var layerDataSource2 = new LayerDataSource();
+                        layerDataSource2.dataSource = tableDataSource;
+
+                        // Hexagons layer
+                        var layerMapSource = new LayerMapSource();
+                        layerMapSource.gdbVersion = 'DBO.EDIT';
+                        layerMapSource.mapLayerId = 0;
+
+                        // join them together
+                        var joinDataSource = new JoinDataSource();
+                        joinDataSource.joinType = 'right-inner-join';
+                        joinDataSource.leftTableKey = 'HexID';
+                        joinDataSource.leftTableSource = layerMapSource;
+                        joinDataSource.rightTableKey = 'HexID';
+                        joinDataSource.rightTableSource = layerDataSource2;
+
+                        // make it into a layer data source
                         var layerDataSource = new LayerDataSource();
-                        layerDataSource.dataSource = queryDataSource;
+                        layerDataSource.dataSource = joinDataSource;
 
-                        props.layerProps = {
-                            source: layerDataSource,
-                            autoGeneralize: false
-                        };
+                        props.layerProps = lang.mixin({
+                            source: layerDataSource
+                        }, props.layerProps);
 
                         break;
                     }
@@ -269,6 +299,49 @@ define([
 
             this.map.destroy();
             domConstruct.destroy(this.mapDiv);
+        },
+        getHoneyComb: function (serviceType) {
+            // summary:
+            //      splits selected feature into adds and updates
+            // serviceType: String
+            console.log('app/MapController:getHoneyComb', arguments);
+
+            var fn = config.fieldNames;
+            var existingProviderHexagonIds = {};
+            array.forEach(this.providerLayer.graphics, function (g) {
+                existingProviderHexagonIds[g.attributes[fn.QualifiedHexID]] =
+                    g.attributes[fn.QualifiedServiceAreasOBJECTID];
+            });
+
+            var comb = {
+                adds: [],
+                updates: []
+            };
+
+            array.forEach(this.selectedFeatures, function (g) {
+                var hexId = g.attributes[fn.HexID];
+                var record;
+
+                if (hexId in existingProviderHexagonIds) {
+                    // updates
+                    record = {
+                        OBJECTID: existingProviderHexagonIds[hexId]
+                    };
+                    record[fn.ProvName] = config.user.agency;
+                    record[fn.HexID] = hexId;
+                    record[fn.ServiceClass] = parseInt(serviceType, 10);
+                    comb.updates.push({attributes: record});
+                } else {
+                    // adds
+                    record = {};
+                    record[fn.ProvName] = config.user.agency;
+                    record[fn.HexID] = hexId;
+                    record[fn.ServiceClass] = parseInt(serviceType, 10);
+                    comb.adds.push({attributes: record});
+                }
+            });
+
+            return comb;
         }
     };
 });

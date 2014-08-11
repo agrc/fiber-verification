@@ -35,6 +35,10 @@ define([
         url: config.urls.mapService + '/dynamicLayer',
         serviceType: 'provider',
         postCreationCallback: function (lyr) {
+            MapController.providerLayer = lyr;
+
+            lyr.setDefinitionExpression('ProvName = \'' + config.user.agency + '\'');
+
             var scaleRenderer = new ScaleDependentRenderer({
                 rendererInfos: [{
                     renderer: new UniqueValueRenderer(config.renderers.fine),
@@ -67,7 +71,12 @@ define([
             });
         },
         layerProps: {
-            autoGeneralize: false
+            autoGeneralize: false,
+            outFields: [
+                config.fieldNames.QualifiedServiceClass,
+                config.fieldNames.QualifiedHexID,
+                config.fieldNames.QualifiedServiceAreasOBJECTID
+            ]
         },
         id: config.layerIds.provider
     }, {

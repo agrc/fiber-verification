@@ -1,5 +1,20 @@
 /* jshint maxlen:false */
 define(['dojo/has'], function (has) {
+    var apiKey;
+    var ownerName;
+    if (has('agrc-api-key') === 'prod') {
+        // mapserv.utah.gov
+        apiKey = 'AGRC-E7FEB434755864';
+        ownerName = 'FIBERADMIN';
+    } else if (has('agrc-api-key') === 'stage') {
+        // test.mapserv.utah.gov
+        apiKey = 'AGRC-FFCDAD6B933051';
+        ownerName = 'FIBERADMIN';
+    } else {
+        // localhost
+        apiKey = 'AGRC-B5D62BD2151902';
+        ownerName = 'DBO';
+    }
     var colors = {
         transparent: [0, 0, 0, 0],
         white: [0, 0, 0, 255],
@@ -8,6 +23,12 @@ define(['dojo/has'], function (has) {
         gray: [255, 255, 255, 255]
     };
     var ServiceClass = 'ServiceClass';
+    var HexID = 'HexID';
+    var baseService = '/arcgis/rest/services/FiberVerification/';
+    var workspaceId = 'FiberVerification';
+    var QualifiedServiceClass = workspaceId + '.' + ownerName + '.ServiceAreas.' + ServiceClass;
+    var QualifiedHexID = workspaceId + '.' + ownerName + '.ServiceAreas.' + HexID;
+    var QualifiedServiceAreasOBJECTID = workspaceId + '.' + ownerName + '.ServiceAreas.OBJECTID';
 
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger
@@ -23,7 +44,7 @@ define(['dojo/has'], function (has) {
 
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
-        apiKey: null, // acquire at developer.mapserv.utah.gov
+        apiKey: apiKey, // acquire at developer.mapserv.utah.gov
 
         user: null, // to be populated after successful sign in
 
@@ -50,25 +71,20 @@ define(['dojo/has'], function (has) {
         urls: {
             search: 'http://api.mapserv.utah.gov/api/v1/search/{0}/{1}',
             vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer',
-            mapService: '/arcgis/rest/services/FiberVerification/MapServer',
-            editApi: '/fiberavailabilitymap/api/edit'
+            mapService: baseService + 'MapServer',
+            applyEdits: baseService + 'FeatureServer/1/applyEdits'
         },
 
-        query:
-            'SELECT h.HexID, h.OBJECTID, h.SHAPE, psa.ProvName, psa.ServiceClass ' +
-            'FROM FiberVerification.${ownerName}.HEXAGONS as h ' +
-            'INNER JOIN ( ' +
-                'SELECT HexID, ProvName, ServiceClass from FiberVerification.${ownerName}.SERVICEAREAS ' +
-                'WHERE ProvName = \'${provName}\' ' +
-                ') as psa ' +
-            'ON psa.HexID = h.HexID',
-
-        workspaceId: 'FiberVerification',
+        workspaceId: workspaceId,
+        ownerName: ownerName,
 
         fieldNames: {
             ProvName: 'ProvName',
-            HexID: 'HexID',
-            Code: 'Code'
+            HexID: HexID,
+            ServiceClass: ServiceClass,
+            QualifiedServiceClass: QualifiedServiceClass,
+            QualifiedHexID: QualifiedHexID,
+            QualifiedServiceAreasOBJECTID: QualifiedServiceAreasOBJECTID
         },
 
         appName: 'fiberverification',
@@ -77,7 +93,7 @@ define(['dojo/has'], function (has) {
             maxScaleForCoarse: 140000,
             fine: {
                 type: 'uniqueValue',
-                field1: ServiceClass,
+                field1: QualifiedServiceClass,
                 field2: null,
                 field3: null,
                 fieldDelimiter: ', ',
@@ -136,7 +152,7 @@ define(['dojo/has'], function (has) {
             },
             coarse: {
                 type: 'uniqueValue',
-                field1: ServiceClass,
+                field1: QualifiedServiceClass,
                 field2: null,
                 field3: null,
                 fieldDelimiter: ', ',
@@ -196,19 +212,6 @@ define(['dojo/has'], function (has) {
         }
     };
 
-    if (has('agrc-api-key') === 'prod') {
-        // mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-E7FEB434755864';
-        window.AGRC.ownerName = 'FIBERADMIN';
-    } else if (has('agrc-api-key') === 'stage') {
-        // test.mapserv.utah.gov
-        window.AGRC.apiKey = 'AGRC-FFCDAD6B933051';
-        window.AGRC.ownerName = 'FIBERADMIN';
-    } else {
-        // localhost
-        window.AGRC.apiKey = 'AGRC-B5D62BD2151902';
-        window.AGRC.ownerName = 'DBO';
-    }
 
     return window.AGRC;
 });

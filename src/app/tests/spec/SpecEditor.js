@@ -29,5 +29,7 @@ require([
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });
+
+        
     });
 });
