@@ -26,9 +26,9 @@ define(['dojo/has'], function (has) {
     var HexID = 'HexID';
     var baseService = '/arcgis/rest/services/FiberVerification/';
     var workspaceId = 'FiberVerification';
-    var QualifiedServiceClass = workspaceId + '.' + ownerName + '.ServiceAreas.' + ServiceClass;
-    var QualifiedHexID = workspaceId + '.' + ownerName + '.ServiceAreas.' + HexID;
-    var QualifiedServiceAreasOBJECTID = workspaceId + '.' + ownerName + '.ServiceAreas.OBJECTID';
+    var QualifiedServiceClass = workspaceId + '.' + ownerName + '.ProviderServiceAreas.' + ServiceClass;
+    var QualifiedHexID = workspaceId + '.' + ownerName + '.ProviderServiceAreas.' + HexID;
+    var QualifiedServiceAreasOBJECTID = workspaceId + '.' + ownerName + '.ProviderServiceAreas.OBJECTID';
 
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger

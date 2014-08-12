@@ -161,15 +161,13 @@ define([
 
                         // Service Areas table
                         var tableDataSource = new TableDataSource();
-                        tableDataSource.dataSourceName = 'FiberVerification.DBO.ServiceAreas';
-                        tableDataSource.gdbVersion = 'DBO.EDIT';
+                        tableDataSource.dataSourceName = 'FiberVerification.' + config.ownerName + '.ProviderServiceAreas';
                         tableDataSource.workspaceId = 'FiberVerification';
                         var layerDataSource2 = new LayerDataSource();
                         layerDataSource2.dataSource = tableDataSource;
 
                         // Hexagons layer
                         var layerMapSource = new LayerMapSource();
-                        layerMapSource.gdbVersion = 'DBO.EDIT';
                         layerMapSource.mapLayerId = 0;
 
                         // join them together
