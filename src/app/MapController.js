@@ -136,7 +136,7 @@ define([
                     lang.hitch(this, 'activateTool')),
                 topic.subscribe(config.topics.map.selectedFeatureClicked,
                     lang.hitch(this, 'onSelectedFeatureClick')),
-                topic.subscribe(config.topics.map.featuresSelected, function (features) {
+                topic.subscribe(config.topics.map.featuresSelected, function(features) {
                     that.selectedFeatures = features;
                 })
             );
@@ -161,7 +161,9 @@ define([
 
                         // Service Areas table
                         var tableDataSource = new TableDataSource();
-                        tableDataSource.dataSourceName = 'FiberVerification.' + config.ownerName + '.ProviderServiceAreas';
+                        tableDataSource.dataSourceName = 'FiberVerification.' +
+                                                          config.ownerName +
+                                                          '.ProviderServiceAreas';
                         tableDataSource.workspaceId = 'FiberVerification';
                         var layerDataSource2 = new LayerDataSource();
                         layerDataSource2.dataSource = tableDataSource;
@@ -224,7 +226,7 @@ define([
                 widget.startup();
             }, this);
         },
-        activateTool: function (geometryType) {
+        activateTool: function(geometryType) {
             // summary:
             //      activates tools on the drawing toolbar
             // geometryType: See Draw Constants
@@ -234,7 +236,7 @@ define([
                 this.toolbar = new Draw(this.map);
 
                 var that = this;
-                this.handles.push(this.toolbar.on('draw-end', function (evt) {
+                this.handles.push(this.toolbar.on('draw-end', function(evt) {
                     that.selectFeatures(evt.geometry);
                 }));
             }
@@ -247,7 +249,7 @@ define([
                 this.toolActive = true;
             }
         },
-        onMapClick: function (evt) {
+        onMapClick: function(evt) {
             // summary:
             //      fires when the user clicks on the map
             //      if no draw tool is selected then it selects or deselects the
@@ -259,7 +261,7 @@ define([
                 this.selectFeatures(evt.mapPoint);
             }
         },
-        onSelectedFeatureClick: function (mapPoint) {
+        onSelectedFeatureClick: function(mapPoint) {
             // summary:
             //      removes clicked feature from selection
             // mapPoint: Object
@@ -267,7 +269,7 @@ define([
 
             this.selectFeatures(mapPoint, true);
         },
-        selectFeatures: function (geometry, subtract) {
+        selectFeatures: function(geometry, subtract) {
             // summary:
             //      selects feature in the select feature layer after
             //      the user completes a drawing
@@ -298,7 +300,7 @@ define([
             this.map.destroy();
             domConstruct.destroy(this.mapDiv);
         },
-        getHoneyComb: function (serviceType) {
+        getHoneyComb: function(serviceType) {
             // summary:
             //      splits selected feature into adds and updates
             // serviceType: String
@@ -306,7 +308,7 @@ define([
 
             var fn = config.fieldNames;
             var existingProviderHexagonIds = {};
-            array.forEach(this.providerLayer.graphics, function (g) {
+            array.forEach(this.providerLayer.graphics, function(g) {
                 existingProviderHexagonIds[g.attributes[fn.QualifiedHexID]] =
                     g.attributes[fn.QualifiedServiceAreasOBJECTID];
             });
@@ -316,7 +318,7 @@ define([
                 updates: []
             };
 
-            array.forEach(this.selectedFeatures, function (g) {
+            array.forEach(this.selectedFeatures, function(g) {
                 var hexId = g.attributes[fn.HexID];
                 var record;
 
@@ -328,14 +330,18 @@ define([
                     record[fn.ProvName] = config.user.agency;
                     record[fn.HexID] = hexId;
                     record[fn.ServiceClass] = parseInt(serviceType, 10);
-                    comb.updates.push({attributes: record});
+                    comb.updates.push({
+                        attributes: record
+                    });
                 } else {
                     // adds
                     record = {};
                     record[fn.ProvName] = config.user.agency;
                     record[fn.HexID] = hexId;
                     record[fn.ServiceClass] = parseInt(serviceType, 10);
-                    comb.adds.push({attributes: record});
+                    comb.adds.push({
+                        attributes: record
+                    });
                 }
             });
 
