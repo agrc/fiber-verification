@@ -21,3 +21,4 @@ src/jquery/
 src/spinjs
 src/stubmodule/
 src/util/
+create_permission_db.json

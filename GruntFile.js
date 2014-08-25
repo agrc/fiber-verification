@@ -146,7 +146,7 @@ module.exports = function(grunt) {
             options: {
                 files: bumpFiles,
                 commitFiles: bumpFiles,
-                pushTo: 'origin'
+                push: false
             }
         }
     });
