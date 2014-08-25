@@ -102,11 +102,15 @@ module.exports = function(grunt) {
             main: {
                 src: 'src/ChangeLog.html',
                 dest: 'dist/ChangeLog.html'
+            },
+            deploy: {
+                src: 'deploy/fiberVerification.zip',
+                dest: 'Z:/Documents/fiberVerification.zip'
             }
         },
         esri_slurp: {
             options: {
-                version: 3.9
+                version: '3.9'
             },
             missing: {
                 dest: 'src/esri'
@@ -119,8 +123,10 @@ module.exports = function(grunt) {
                     archive: 'deploy/fiberVerification.zip'
                 },
                 files: [{
-                    src: ['dist/**'],
-                    dest: '/'
+                    src: ['**', '!build-report.txt', '!util/**'],
+                    dest: 'FiberAvailibilityMap',
+                    cwd: 'dist/',
+                    expand: true
                 }]
             }
         },
@@ -145,22 +151,12 @@ module.exports = function(grunt) {
         }
     });
 
-    // Register tasks.
-    grunt.loadNpmTasks('grunt-contrib-jasmine');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-contrib-imagemin');
-    grunt.loadNpmTasks('grunt-dojo');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-esri-slurp');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-processhtml');
-    grunt.loadNpmTasks('grunt-contrib-compress');
-    grunt.loadNpmTasks('grunt-amdcheck');
-    grunt.loadNpmTasks('grunt-newer');
-    grunt.loadNpmTasks('grunt-if-missing');
-    grunt.loadNpmTasks('grunt-bump');
+    // Loading dependencies
+    for (var key in grunt.file.readJSON('package.json').devDependencies) {
+        if (key !== 'grunt' && key.indexOf('grunt') === 0) {
+            grunt.loadNpmTasks(key);
+        }
+    }
 
     // Default task.
     grunt.registerTask('default', [
@@ -175,15 +171,15 @@ module.exports = function(grunt) {
         'clean',
         'dojo:prod',
         'imagemin:dynamic',
-        'copy',
+        'copy:main',
         'processhtml:dist',
         'compress'
     ]);
-    grunt.registerTask('stage-build', [
+    grunt.registerTask('stage', [
         'clean',
         'dojo:stage',
         'imagemin:dynamic',
-        'copy',
+        'copy:main',
         'processhtml:dist',
         'compress'
     ]);
