@@ -84,7 +84,7 @@ define([
             var login = new LoginRegister({
                 appName: config.appName,
                 logoutDiv: this.logoutDiv,
-                securedServicesBaseUrl: 'blah'
+                securedServicesBaseUrl: config.urls.securedServicesBaseUrl
             });
 
             var that = this;

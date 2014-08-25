@@ -74,7 +74,8 @@ define(['dojo/has'], function (has) {
             search: 'http://api.mapserv.utah.gov/api/v1/search/{0}/{1}',
             vector: 'http://mapserv.utah.gov/arcgis/rest/services/BaseMaps/Vector/MapServer',
             mapService: baseService + 'MapServer',
-            applyEdits: baseService + 'FeatureServer/1/applyEdits'
+            applyEdits: baseService + 'FeatureServer/1/applyEdits',
+            securedServicesBaseUrl: baseService
         },
 
         workspaceId: workspaceId,
