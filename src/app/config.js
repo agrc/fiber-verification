@@ -4,9 +4,9 @@ define(['dojo/has'], function (has) {
     var ownerName;
     if (has('agrc-api-key') === 'prod') {
         // mapserv.utah.gov
-        //apiKey = 'AGRC-E7FEB434755864';
-        // fiberavailability.mapserv.utah.gov
-        apiKey = 'AGRC-37481581975663';
+        // apiKey = 'AGRC-E7FEB434755864';
+        // fiberediting.mapserv.utah.gov
+        apiKey = 'AGRC-B8627CDB199733';
         ownerName = 'FIBERADMIN';
     } else if (has('agrc-api-key') === 'stage') {
         // test.mapserv.utah.gov
