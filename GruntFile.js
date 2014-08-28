@@ -106,6 +106,10 @@ module.exports = function(grunt) {
             deploy: {
                 src: 'deploy/fiberVerification.zip',
                 dest: 'Z:/Documents/fiberVerification.zip'
+            },
+            update: {
+                src: 'deploy/fiberVerification_update.zip',
+                dest: 'Z:/Documents/fiberVerification_update.zip'
             }
         },
         esri_slurp: {
@@ -124,7 +128,18 @@ module.exports = function(grunt) {
                 },
                 files: [{
                     src: ['**', '!build-report.txt', '!util/**'],
-                    dest: 'FiberAvailibilityMap',
+                    dest: 'FiberAvailabilityMap',
+                    cwd: 'dist/',
+                    expand: true
+                }]
+            },
+            update: {
+                options: {
+                    archive: 'deploy/fiberVerification_update.zip'
+                },
+                files: [{
+                    src: ['dojo/dojo.*', 'app/**', '!dojo/dojo.profile.js'],
+                    dest: 'FiberAvailabilityMap',
                     cwd: 'dist/',
                     expand: true
                 }]
@@ -188,5 +203,14 @@ module.exports = function(grunt) {
         'jshint',
         'connect',
         'jasmine:default'
+    ]);
+    grunt.registerTask('deploy', [
+        'compress',
+        'copy:deploy',
+        'copy:update'
+    ]);
+    grunt.registerTask('deploy-update', [
+        'compress:update',
+        'copy:update'
     ]);
 };
