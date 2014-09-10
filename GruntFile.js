@@ -1,59 +1,92 @@
 /* jshint camelcase:false */
 module.exports = function(grunt) {
-    var jsFiles = 'src/app/**/*.js';
-    var otherFiles = [
-        'src/app/**/*.html',
-        'src/app/**/*.css',
-        'src/index.html',
-        'src/ChangeLog.html'
-    ];
-    var gruntFile = 'GruntFile.js';
-    var internFile = 'tests/intern.js';
-    var jshintFiles = [jsFiles, gruntFile, internFile];
-    var bumpFiles = [
-        'package.json',
-        'bower.json',
-        'src/app/config.js'
-    ];
+    var jsFiles = 'src/app/**/*.js',
+        otherFiles = [
+            'src/app/**/*.html',
+            'src/app/**/*.css',
+            'src/index.html',
+            'src/ChangeLog.html'
+        ],
+        gruntFile = 'GruntFile.js',
+        jshintFiles = [jsFiles, gruntFile],
+        bumpFiles = [
+            'package.json',
+            'bower.json',
+            'src/app/config.js'
+        ],
+        deployFiles = [
+            '**',
+            '!build-report.txt',
+            '!util/**',
+            '!jasmine-favicon-reporter/**',
+            '!**/*.uncompressed.js',
+            '!**/*consoleStripped.js',
+            '!**/*.min.*',
+            '!**/tests/**',
+            '!**/bootstrap/test-infra/**',
+            '!**/bootstrap/less/**'
+        ],
+        deployDir = 'FiberAvailabilityMap',
+        secrets;
+    try {
+        secrets = grunt.file.readJSON('secrets.json');
+    } catch (e) {
+        // swallow for build server
+        secrets = {
+            stageHost: '',
+            prodHost: '',
+            username: '',
+            password: ''
+        };
+    }
 
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        jasmine: {
-            'default': {
-                src: ['src/app/run.js'],
+        amdcheck: {
+            main: {
                 options: {
-                    specs: ['src/app/**/Spec*.js'],
-                    vendor: [
-                        'src/jasmine-favicon-reporter/vendor/favico.js',
-                        'src/jasmine-favicon-reporter/jasmine-favicon-reporter.js',
-                        'src/app/tests/jasmineTestBootstrap.js',
-                        'src/dojo/dojo.js'
-                    ],
-                    host: 'http://localhost:8000'
-                }
+                    removeUnusedDependencies: false
+                },
+                files: [{
+                    src: [
+                        'src/app/**/*.js'
+                    ]
+                }]
             }
         },
-        jshint: {
-            files: jshintFiles,
+        bump: {
             options: {
-                jshintrc: '.jshintrc'
+                files: bumpFiles,
+                commitFiles: bumpFiles,
+                push: false
             }
         },
-        watch: {
-            jshint: {
-                files: jshintFiles,
-                tasks: ['jshint', 'jasmine:default:build']
-            },
-            src: {
-                files: jshintFiles.concat(otherFiles),
+        clean: {
+            build: ['dist'],
+            deploy: ['deploy']
+        },
+        compress: {
+            main: {
                 options: {
-                    livereload: true
-                }
+                    archive: 'deploy/deploy.zip'
+                },
+                files: [{
+                    src: deployFiles,
+                    dest: './',
+                    cwd: 'dist/',
+                    expand: true
+                }]
             }
         },
         connect: {
-            uses_defaults: {}
+            uses_mains: {}
+        },
+        copy: {
+            main: {
+                src: 'src/ChangeLog.html',
+                dest: 'dist/ChangeLog.html'
+            }
         },
         dojo: {
             prod: {
@@ -77,91 +110,119 @@ module.exports = function(grunt) {
                 basePath: './src'
             }
         },
-        processhtml: {
-            options: {},
-            dist: {
-                files: {
-                    'dist/index.html': ['src/index.html']
+        esri_slurp: {
+            options: {
+                version: '3.10'
+            },
+            dev: {
+                options: {
+                    beautify: true
+                },
+                dest: 'src/esri'
+            },
+            travis: {
+                options: {
+                    beautify: false
                 }
             }
         },
         imagemin: {
-            dynamic: {
+            main: {
                 options: {
                     optimizationLevel: 3
                 },
                 files: [{
                     expand: true, // Enable dynamic expansion
                     cwd: 'src/', // Src matches are relative to this path
-                    src: ['**/*.{png,jpg,gif}'], // Actual patterns to match
-                    dest: 'dist/' // Destination path prefix
+                    src: '**/*.{png,jpg,gif}', // Actual patterns to match
+                    dest: 'src/' // Destination path prefix
                 }]
             }
         },
-        copy: {
+        jasmine: {
             main: {
-                src: 'src/ChangeLog.html',
-                dest: 'dist/ChangeLog.html'
-            },
-            deploy: {
-                src: 'deploy/fiberVerification.zip',
-                dest: 'Z:/Documents/fiberVerification.zip'
-            },
-            update: {
-                src: 'deploy/fiberVerification_update.zip',
-                dest: 'Z:/Documents/fiberVerification_update.zip'
+                src: ['src/app/run.js'],
+                options: {
+                    specs: ['src/app/**/Spec*.js'],
+                    vendor: [
+                        'src/jasmine-favicon-reporter/vendor/favico.js',
+                        'src/jasmine-favicon-reporter/jasmine-favicon-reporter.js',
+                        'src/app/tests/jasmineTestBootstrap.js',
+                        'src/dojo/dojo.js',
+                        'src/app/tests/jasmineAMDErrorChecking.js'
+                    ],
+                    host: 'http://localhost:8000'
+                }
             }
         },
-        esri_slurp: {
+        jshint: {
+            files: jshintFiles,
             options: {
-                version: '3.9'
-            },
-            missing: {
-                dest: 'src/esri'
+                jshintrc: '.jshintrc'
             }
         },
-        clean: ['dist'],
-        compress: {
+        processhtml: {
+            options: {},
             main: {
-                options: {
-                    archive: 'deploy/fiberVerification.zip'
+                files: {
+                    'dist/index.html': ['src/index.html']
+                }
+            }
+        },
+        secrets: secrets,
+        sftp: {
+            stage: {
+                files: {
+                    './': 'deploy/deploy.zip'
                 },
-                files: [{
-                    src: ['**', '!build-report.txt', '!util/**'],
-                    dest: 'FiberAvailabilityMap',
-                    cwd: 'dist/',
-                    expand: true
-                }]
+                options: {
+                    host: '<%= secrets.stageHost %>'
+                }
             },
-            update: {
-                options: {
-                    archive: 'deploy/fiberVerification_update.zip'
+            prod: {
+                files: {
+                    './': 'deploy/deploy.zip'
                 },
-                files: [{
-                    src: ['dojo/dojo.*', 'app/**', '!dojo/dojo.profile.js'],
-                    dest: 'FiberAvailabilityMap',
-                    cwd: 'dist/',
-                    expand: true
-                }]
-            }
-        },
-        amdcheck: {
-            dev: {
                 options: {
-                    removeUnusedDependencies: false
-                },
-                files: [{
-                    src: [
-                        'src/app/**/*.js'
-                    ]
-                }]
-            }
-        },
-        bump: {
+                    host: '<%= secrets.prodHost %>'
+                }
+            },
             options: {
-                files: bumpFiles,
-                commitFiles: bumpFiles,
-                push: false
+                path: './' + deployDir + '/',
+                srcBasePath: 'deploy/',
+                username: '<%= secrets.username %>',
+                password: '<%= secrets.password %>',
+                showProgress: true
+            }
+        },
+        sshexec: {
+            options: {
+                username: '<%= secrets.username %>',
+                password: '<%= secrets.password %>'
+            },
+            stage: {
+                command: ['cd ' + deployDir, 'unzip -o deploy.zip', 'rm deploy.zip'].join(';'),
+                options: {
+                    host: '<%= secrets.stageHost %>'
+                }
+            },
+            prod: {
+                command: ['cd ' + deployDir, 'unzip -o deploy.zip', 'rm deploy.zip'].join(';'),
+                options: {
+                    host: '<%= secrets.prodHost %>'
+                }
+            }
+        },
+        watch: {
+            jshint: {
+                files: jshintFiles,
+                tasks: ['jshint', 'jasmine:main:build']
+            },
+            src: {
+                files: jshintFiles.concat(otherFiles),
+                options: {
+                    livereload: true
+                }
             }
         }
     });
@@ -176,41 +237,42 @@ module.exports = function(grunt) {
     // Default task.
     grunt.registerTask('default', [
         'jshint',
-        'amdcheck',
-        'if-missing:esri_slurp:missing',
-        'jasmine:default:build',
+        'amdcheck:main',
+        'if-missing:esri_slurp:dev',
+        'jasmine:main:build',
         'connect',
         'watch'
     ]);
-    grunt.registerTask('build', [
-        'clean',
+    grunt.registerTask('build-prod', [
+        'clean:build',
         'dojo:prod',
-        'imagemin:dynamic',
+        'newer:imagemin:main',
         'copy:main',
-        'processhtml:dist',
-        'compress'
+        'processhtml:main'
     ]);
-    grunt.registerTask('stage', [
-        'clean',
+    grunt.registerTask('build-stage', [
+        'clean:build',
         'dojo:stage',
-        'imagemin:dynamic',
+        'newer:imagemin:main',
         'copy:main',
-        'processhtml:dist',
-        'compress'
+        'processhtml:main'
+    ]);
+    grunt.registerTask('deploy-prod', [
+        'clean:deploy',
+        'compress:main',
+        'sftp:prod',
+        'sshexec:prod'
+    ]);
+    grunt.registerTask('deploy-stage', [
+        'clean:deploy',
+        'compress:main',
+        'sftp:stage',
+        'sshexec:stage'
     ]);
     grunt.registerTask('travis', [
-        'esri_slurp',
+        'esri_slurp:travis',
         'jshint',
         'connect',
-        'jasmine:default'
-    ]);
-    grunt.registerTask('deploy', [
-        'compress',
-        'copy:deploy',
-        'copy:update'
-    ]);
-    grunt.registerTask('deploy-update', [
-        'compress:update',
-        'copy:update'
+        'jasmine:main'
     ]);
 };

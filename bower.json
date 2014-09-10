@@ -1,16 +1,15 @@
 {
   "name": "fiber-verification",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
-    "agrc": "agrc-widgets#",
+    "agrc": "agrc-widgets#2.5.1",
     "bootstrap": "~3",
     "dijit": "~1.9",
     "dojo": "~1.9",
     "dojox": "~1.9",
-    "ijit": "agrc-ijit#",
-    "jasmine-favicon-reporter": "*",
+    "ijit": "agrc-ijit#2.5.4",
+    "jasmine-favicon-reporter": null,
     "stubmodule": null,
     "util": "dojo-util#~1.9"
-  },
-  "devDependencies": {}
+  }
 }
