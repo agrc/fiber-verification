@@ -1,14 +1,25 @@
 {
     "folders": [{
         "folder_exclude_patterns": [
+            ".grunt",
+            "deploy",
             "dist",
+            "node_modules",
+            "src/agrc",
+            "src/bootstrap",
+            "src/components-jasmine",
+            "src/dijit",
             "src/dojo",
             "src/dojox",
-            "src/util",
-            "src/dijit",
             "src/esri",
-            "node_modules",
-            ".grunt"
+            "src/favico.js",
+            "src/ijit",
+            "src/jasmine-favicon-reporter",
+            "src/jasmine-jsreporter",
+            "src/jquery",
+            "src/spinjs",
+            "src/stubmodule",
+            "src/util"
         ],
         "file_exclude_patterns": [
             "*.sublime-workspace"
