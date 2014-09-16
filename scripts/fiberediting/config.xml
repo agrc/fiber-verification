@@ -1,0 +1,17 @@
+<ESRI.Configuration xmlns="http://schemas.esri.com/Desktop/AddIns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><Name>Fiber Editing Addin</Name><AddInID>{c63ff089-d6e5-46d8-8bcb-89e7d56029f2}</AddInID><Description>Addin that allows easy editing of the broadband fiber data</Description><Version>0.1</Version><Image /><Author>Scott Davis</Author><Company>AGRC</Company><Date>09/15/2014</Date><Targets><Target name="Desktop" version="10.2" /></Targets><AddIn language="PYTHON" library="fiberediting_fiberediting.py" namespace="fiberediting_fiberediting"><ArcMap>
+    <Commands>
+        <ComboBox caption="Provider" category="Fiber Editing Addin" class="ComboBoxClass1" id="fiberediting_fiberediting.combobox" itemSizeString="WWWWWWWWW" message="" rows="20" sizeString="WWWWWWWWW" tip=""><Help heading="" /></ComboBox>
+        <Button caption="1 Month" category="Fiber Editing Addin" class="BtnOneMonth" id="fiberediting_fiberediting.btn_one" image="" message="" tip=""><Help heading="" /></Button>
+        <Button caption="9 Month" category="Fiber Editing Addin" class="BtnNineMonth" id="fiberediting_fiberediting.btn_nine" image="" message="" tip=""><Help heading="" /></Button>
+        <Button caption="No Service" category="Fiber Editing Addin" class="BtnNone" id="fiberediting_fiberediting.btn_none" image="" message="" tip=""><Help heading="" /></Button>
+        <Button caption="Save Edits" category="Fiber Editing Addin" class="BtnSaveEdits" id="fiberediting_fiberediting.btn_save" image="" message="" tip=""><Help heading="" /></Button>
+        </Commands>
+    <Extensions>
+        <Extension autoLoad="true" category="Fiber Editing Addin" class="FiberEditingExtension" description="" id="fiberediting_fiberediting.extension" name="FiberEditingExtension" productName="FiberEditingExtension" showInExtensionDialog="true" />
+        </Extensions>
+    <Toolbars>
+        <Toolbar caption="Fiber Editing" category="Fiber Editing Addin" id="fiberediting_fiberediting.toolbar" showInitially="true"><Items><ComboBox refID="fiberediting_fiberediting.combobox" /><Button refID="fiberediting_fiberediting.btn_one" /><Button refID="fiberediting_fiberediting.btn_nine" /><Button refID="fiberediting_fiberediting.btn_none" /><Button refID="fiberediting_fiberediting.btn_save" /></Items></Toolbar>
+        </Toolbars>
+    <Menus>
+        </Menus>
+    </ArcMap></AddIn></ESRI.Configuration>
