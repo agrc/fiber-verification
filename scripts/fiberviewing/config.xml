@@ -1,0 +1,13 @@
+<ESRI.Configuration xmlns="http://schemas.esri.com/Desktop/AddIns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><Name>Fiber Viewing</Name><AddInID>{9318a2a6-38a2-4960-b6ef-e0f5cc91eb49}</AddInID><Description>Tools for viewing the broadband fiber data</Description><Version>0.1</Version><Image /><Author>Scott Davis</Author><Company>AGRC</Company><Date>09/23/2014</Date><Targets><Target name="Desktop" version="10.2" /></Targets><AddIn language="PYTHON" library="fiberviewing_addin.py" namespace="fiberviewing_addin"><ArcMap>
+    <Commands>
+        <ComboBox caption="Provider" category="Fiber Viewing" class="ProviderComboBox" id="fiberviewing_addin.combobox" itemSizeString="WWWWWWWWWWWWWWWW" message="" rows="10" sizeString="WWWWWWWWWWWWWWWW" tip=""><Help heading="" /></ComboBox>
+        </Commands>
+    <Extensions>
+        <Extension autoLoad="true" category="Fiber Viewing" class="FiberViewingExtension" description="" id="fiberviewing_addin.extension" name="Fiber Viewing" productName="Fiber Viewing" showInExtensionDialog="true" />
+        </Extensions>
+    <Toolbars>
+        <Toolbar caption="Fiber Viewing" category="Fiber Viewing" id="fiberviewing_addin.toolbar" showInitially="true"><Items><ComboBox refID="fiberviewing_addin.combobox" /></Items></Toolbar>
+        </Toolbars>
+    <Menus>
+        </Menus>
+    </ArcMap></AddIn></ESRI.Configuration>
