@@ -136,8 +136,8 @@ require([
         },
         'attributes': {
             'FiberVerification.DBO.Hexagons.OBJECTID': 76821,
-            'FiberVerification.DBO.ServiceAreas.HexID': 11712,
-            'FiberVerification.DBO.ServiceAreas.ServiceClass': 9
+            'FiberVerification.DBO.ProviderServiceAreas.HexID': 11712,
+            'FiberVerification.DBO.ProviderServiceAreas.ServiceClass': 9
         },
         'symbol': {
             'color': [85, 85, 85, 77],
@@ -172,8 +172,8 @@ require([
         },
         'attributes': {
             'FiberVerification.DBO.Hexagons.OBJECTID': 76821,
-            'FiberVerification.DBO.ServiceAreas.HexID': 12011,
-            'FiberVerification.DBO.ServiceAreas.ServiceClass': 9
+            'FiberVerification.DBO.ProviderServiceAreas.HexID': 12011,
+            'FiberVerification.DBO.ProviderServiceAreas.ServiceClass': 9
         },
         'symbol': {
             'color': [85, 85, 85, 77],
