@@ -5,9 +5,13 @@
 api/FiberVerification.Editing.Api/.nuget/
 api/FiberVerification.Editing.Api/connections.Release.config
 api/FiberVerification.Editing.Api/connections.Stage.config
+create_permission_db.json
+deploy/
 deploy/fiberVerification.zip
+deploy/fiberVerification_update.zip
 dist/
 node_modules/
+secrets.json
 src/agrc/
 src/bootstrap/
 src/dijit/
@@ -21,6 +25,3 @@ src/jquery/
 src/spinjs
 src/stubmodule/
 src/util/
-create_permission_db.json
-deploy/fiberVerification_update.zip
-secrets.json
