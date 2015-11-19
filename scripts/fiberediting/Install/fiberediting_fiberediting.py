@@ -30,7 +30,7 @@ def start_editing():
             con = 'FiberVerification_TEST.sde'
         print(os.path.join(os.getcwd(), con))
         editor = arcpy.da.Editor(os.path.join(os.getcwd(), con))
-        editor.startEditing(False, True)
+        editor.startEditing(True, True)
     editor.startOperation()
 
 
