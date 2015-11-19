@@ -102,7 +102,7 @@ define([
                 mapDiv: that.mapDiv
             });
             MapController.startup();
-            
+
             this.childWidgets.push(
                 new FindAddress({
                     map: MapController.map,

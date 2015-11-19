@@ -21,13 +21,11 @@ module.exports = function(grunt) {
             '!jasmine-favicon-reporter/**',
             '!**/*.uncompressed.js',
             '!**/*consoleStripped.js',
-            '!**/*.min.*',
             '!**/tests/**',
             '!**/bootstrap/test-infra/**',
             '!**/bootstrap/less/**'
         ],
-        deployDirProd = 'FiberAvailabilityMap',
-        deployDirStage = 'wwwroot/FiberAvailabilityMap',
+        deployDir = './wwwroot/fiber-verification/',
         secrets;
     try {
         secrets = grunt.file.readJSON('secrets.json');
@@ -113,7 +111,7 @@ module.exports = function(grunt) {
         },
         esri_slurp: {
             options: {
-                version: '3.10'
+                version: '3.13'
             },
             dev: {
                 options: {
@@ -178,7 +176,7 @@ module.exports = function(grunt) {
                 },
                 options: {
                     host: '<%= secrets.stageHost %>',
-                    path: './' + deployDirStage + '/'
+                    path: deployDir
                 }
             },
             prod: {
@@ -187,7 +185,7 @@ module.exports = function(grunt) {
                 },
                 options: {
                     host: '<%= secrets.prodHost %>',
-                    path: './' + deployDirProd + '/'
+                    path: deployDir
                 }
             },
             options: {
@@ -203,13 +201,13 @@ module.exports = function(grunt) {
                 password: '<%= secrets.password %>'
             },
             stage: {
-                command: ['cd ' + deployDirStage, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
+                command: ['cd ' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
                 options: {
                     host: '<%= secrets.stageHost %>'
                 }
             },
             prod: {
-                command: ['cd ' + deployDirProd, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
+                command: ['cd ' + deployDir, 'unzip -oq deploy.zip', 'rm deploy.zip'].join(';'),
                 options: {
                     host: '<%= secrets.prodHost %>'
                 }

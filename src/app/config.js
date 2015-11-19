@@ -26,7 +26,8 @@ define(['dojo/has'], function (has) {
     };
     var ServiceClass = 'ServiceClass';
     var HexID = 'HexID';
-    var baseService = '/arcgis/rest/services/FiberVerification/';
+    var loc = window.location; // required so that LoginRegister matches the correct urls
+    var baseService = loc.protocol + '//' + loc.hostname + '/arcgis/rest/services/FiberVerification/';
     var workspaceId = 'FiberVerification';
     var QualifiedServiceClass = workspaceId + '.' + ownerName + '.ProviderServiceAreas.' + ServiceClass;
     var QualifiedHexID = workspaceId + '.' + ownerName + '.ProviderServiceAreas.' + HexID;

@@ -1,6 +1,6 @@
 /*jshint unused:false */
 
-// Useful for tagging packages such as proj4 as AMD 
+// Useful for tagging packages such as proj4 as AMD
 // to help the build system work with them better.
 var amdTag = function (filename, mid) {
     return (/.*\.js$/).test(filename);
@@ -40,7 +40,7 @@ var profile = {
 
         // We’re fully async, so get rid of the legacy loader
         'dojo-sync-loader':0,
-        
+
         // dojo-xhr-factory relies on dojo-sync-loader
         'dojo-xhr-factory':0,
 
@@ -50,7 +50,7 @@ var profile = {
     packages: [{
         name: 'esri',
         resourceTags: amdTag
-    }],
+    }, 'dgrid', 'mustache', 'xstyle', 'put-selector'],
     // this is to make sure that the widget templates get built into the layer file.
     userConfig: {
         packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri']
