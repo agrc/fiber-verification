@@ -124,14 +124,15 @@ module.exports = function (grunt) {
         },
         jasmine: {
             main: {
-                src: ['src/app/run.js'],
                 options: {
                     specs: ['src/app/**/Spec*.js'],
                     vendor: [
                         'src/jasmine-favicon-reporter/vendor/favico.js',
                         'src/jasmine-favicon-reporter/jasmine-favicon-reporter.js',
+                        'src/jasmine-jsreporter/jasmine-jsreporter.js',
                         'src/app/tests/jasmineTestBootstrap.js',
                         'src/dojo/dojo.js',
+                        'src/app/packages.js',
                         'src/app/tests/jasmineAMDErrorChecking.js'
                     ],
                     host: 'http://localhost:8000'
@@ -150,7 +151,8 @@ module.exports = function (grunt) {
             options: {},
             main: {
                 files: {
-                    'dist/index.html': ['src/index.html']
+                    'dist/index.html': ['src/index.html'],
+                    'dist/user_admin.html': ['src/user_admin.html']
                 }
             }
         },

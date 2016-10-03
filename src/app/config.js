@@ -1,5 +1,13 @@
 /* jshint maxlen:false */
-define(['dojo/has'], function (has) {
+define([
+    'dojo/has',
+
+    'esri/config'
+], function (
+    has,
+
+    esriConfig
+) {
     var apiKey;
     var ownerName = 'FIBERADMIN';
     if (has('agrc-api-key') === 'prod') {
@@ -29,6 +37,10 @@ define(['dojo/has'], function (has) {
     var QualifiedServiceClass = workspaceId + '.' + ownerName + '.ProviderServiceAreas.' + ServiceClass;
     var QualifiedHexID = workspaceId + '.' + ownerName + '.ProviderServiceAreas.' + HexID;
     var QualifiedServiceAreasOBJECTID = workspaceId + '.' + ownerName + '.ProviderServiceAreas.OBJECTID';
+
+    // force api to use CORS on mapserv thus removing the test request on app load
+    // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
+    esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
 
     window.AGRC = {
         // errorLogger: ijit.modules.ErrorLogger

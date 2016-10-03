@@ -1,18 +1,38 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Fiber Availability User Admin</title>
+<head>
+    <title>Fiber Availability User Admin</title>
 
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-        <link rel="stylesheet" href="dijit/themes/dijit.css">
-        <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="ijit/resources/authentication/UserAdmin.css">
+    <link rel="stylesheet" href="dijit/themes/dijit.css">
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="ijit/resources/authentication/UserAdmin.css">
 
-        <script src='dojo/dojo.js'></script>
-        <script src='app/run_user_admin.js'></script>
-    </head>
-    <body>
-        <div id="widget-div"></div>
-    </body>
+    <!-- build:template
+    <script data-dojo-config="deps:['app/packages', 'app/run']" src='dojo/dojo.js'></script>
+    /build -->
+
+    <!-- build:remove -->
+    <script data-dojo-config="isDebug: 1" src='dojo/dojo.js'></script>
+    <script src='app/packages.js'></script>
+    <script src='app/run.js'></script>
+    <!-- /build -->
+</head>
+<body>
+    <div id="widget-div"></div>
+
+    <script>
+        require([
+            'ijit/widgets/authentication/UserAdmin',
+            'app/config',
+            'dojo/domReady!'
+        ], function (UserAdmin, config) {
+            new UserAdmin({
+                title: 'Fiber Availability',
+                appName: config.appName
+            }, 'widget-div');
+        });
+    </script>
+</body>
 </html>

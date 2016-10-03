@@ -1,21 +1,19 @@
 require([
-    'app/SelectionTools',
     'app/MapController',
+    'app/SelectionTools',
 
-    'dojo/_base/window',
-    'dojo/query',
-
+    'dojo/dom-class',
     'dojo/dom-construct',
-    'dojo/dom-class'
+    'dojo/query',
+    'dojo/_base/window'
 ], function (
-    WidgetUnderTest,
     MapController,
+    WidgetUnderTest,
 
-    win,
-    query,
-
+    domClass,
     domConstruct,
-    domClass
+    query,
+    win
 ) {
     describe('app/SelectionTools', function () {
         var widget;

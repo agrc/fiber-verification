@@ -1,15 +1,14 @@
 require([
-    'app/MapController',
     'app/config',
+    'app/MapController',
 
     'dojo/dom-construct'
-
 ], function (
-    MapController,
     config,
+    MapController,
 
     domConstruct
-    ) {
+) {
     var selectedFeatures = [{
         'geometry': {
             'rings': [
