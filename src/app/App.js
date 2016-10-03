@@ -1,52 +1,45 @@
 define([
-    'dojo/text!./templates/App.html',
-
-    'dojo/_base/declare',
-    'dojo/_base/array',
-
-    'dojo/topic',
-
-    'dijit/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',
+    './config',
+    './data/mapLayers',
+    './Editor',
+    './MapController',
+    './SelectionTools',
 
     'agrc/widgets/locate/FindAddress',
     'agrc/widgets/locate/MagicZoom',
 
+    'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
+    'dijit/_WidgetsInTemplateMixin',
+
+    'dojo/text!./templates/App.html',
+    'dojo/topic',
+    'dojo/_base/array',
+    'dojo/_base/declare',
+
     'ijit/widgets/authentication/LoginRegister',
 
-    './config',
-    './MapController',
-    './SelectionTools',
-    './Editor',
-
-    './data/mapLayers',
-
-
     'bootstrap'
-], function(
-    template,
-
-    declare,
-    array,
-
-    topic,
-
-    _WidgetBase,
-    _TemplatedMixin,
-    _WidgetsInTemplateMixin,
+], function (
+    config,
+    mapLayers,
+    Editor,
+    MapController,
+    SelectionTools,
 
     FindAddress,
     MagicZoom,
 
-    LoginRegister,
+    _TemplatedMixin,
+    _WidgetBase,
+    _WidgetsInTemplateMixin,
 
-    config,
-    MapController,
-    SelectionTools,
-    Editor,
+    template,
+    topic,
+    array,
+    declare,
 
-    mapLayers
+    LoginRegister
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -63,7 +56,7 @@ define([
         // map: agrc.widgets.map.Basemap
         map: null,
 
-        constructor: function() {
+        constructor: function () {
             // summary:
             //      first function to fire after page loads
             console.info('app.App::constructor', arguments);
@@ -73,7 +66,7 @@ define([
 
             this.inherited(arguments);
         },
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Fires when
             console.log('app.App::postCreate', arguments);
@@ -93,7 +86,7 @@ define([
 
                 that.providerNameSpan.innerHTML = event.user.agency;
 
-                array.forEach(mapLayers, function(layer){
+                array.forEach(mapLayers, function (layer) {
                     topic.publish(config.topics.map.enableLayer, layer);
                 }, that);
             });
@@ -123,7 +116,7 @@ define([
 
             this.inherited(arguments);
         },
-        startup: function() {
+        startup: function () {
             // summary:
             //      Fires after postCreate when all of the child widgets are finished laying out.
             console.log('app.App::startup', arguments);

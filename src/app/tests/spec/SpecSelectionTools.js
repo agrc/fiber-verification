@@ -7,7 +7,7 @@ require([
 
     'dojo/dom-construct',
     'dojo/dom-class'
-], function(
+], function (
     WidgetUnderTest,
     MapController,
 
@@ -17,27 +17,27 @@ require([
     domConstruct,
     domClass
 ) {
-    describe('app/SelectionTools', function() {
+    describe('app/SelectionTools', function () {
         var widget;
         var destroy = function (widget) {
             widget.destroyRecursive();
             widget = null;
         };
 
-        beforeEach(function() {
+        beforeEach(function () {
             widget = new WidgetUnderTest(null, domConstruct.create('div', null, win.body()));
             widget.startup();
             spyOn(MapController, 'activateTool');
         });
 
-        afterEach(function() {
+        afterEach(function () {
             if (widget) {
                 destroy(widget);
             }
         });
 
-        describe('Sanity', function() {
-            it('should create a SelectionTools', function() {
+        describe('Sanity', function () {
+            it('should create a SelectionTools', function () {
                 expect(widget).toEqual(jasmine.any(WidgetUnderTest));
             });
         });

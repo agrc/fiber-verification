@@ -1,39 +1,33 @@
 define([
-    'dojo/text!./templates/Editor.html',
+    './config',
+    './MapController',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
-    'dojo/_base/array',
-
-    'dojo/topic',
-    'dojo/request',
-
-    'dojo/dom-class',
-
-    'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
-    './config',
-    './MapController'
-], function(
-    template,
+    'dojo/dom-class',
+    'dojo/request',
+    'dojo/text!./templates/Editor.html',
+    'dojo/topic',
+    'dojo/_base/array',
+    'dojo/_base/declare',
+    'dojo/_base/lang'
+], function (
+    config,
+    MapController,
 
-    declare,
-    lang,
-    array,
-
-    topic,
-    xhr,
-
-    domClass,
-
-    _WidgetBase,
     _TemplatedMixin,
+    _WidgetBase,
     _WidgetsInTemplateMixin,
 
-    config,
-    MapController
+    domClass,
+    xhr,
+    template,
+    topic,
+    array,
+    declare,
+    lang
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // description:
@@ -45,7 +39,7 @@ define([
 
         // Properties to be sent into constructor
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -56,7 +50,7 @@ define([
 
             this.inherited(arguments);
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      wire events, and such
             //
@@ -93,7 +87,7 @@ define([
                 domClass.add(this.domNode, to);
             }
         },
-        submit: function(evt) {
+        submit: function (evt) {
             // summary:
             //      sends the id's off to the editing api
             // evt: click event on a button
@@ -115,7 +109,7 @@ define([
             };
 
             var self = this;
-            xhr.post(config.urls.applyEdits, params).then(function(){
+            xhr.post(config.urls.applyEdits, params).then(function () {
                 self.cancel();
                 topic.publish(config.topics.map.refreshProvider);
             });

@@ -9,7 +9,7 @@
             typeof window !== 'undefined' &&
             window.dojoConfig &&
             window.dojoConfig.isJasmineTestRunner
-            ) ? '/src': './',
+            ) ? '/src' : './',
         packages: [
             'agrc',
             'app',
@@ -67,4 +67,4 @@
             app.startup();
         }
     });
-})();
+}());

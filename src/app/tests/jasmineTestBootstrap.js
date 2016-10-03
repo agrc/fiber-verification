@@ -1,16 +1,16 @@
 /* global JasmineFaviconReporter */
-/*jshint unused:false*/
-var dojoConfig = {
-    // isDebug: false,
-    isJasmineTestRunner: true,
-    packages: [{
-        name: 'matchers',
-        location: 'matchers/src'
-    },{
-        name: 'stubmodule',
-        location: 'stubmodule/src',
-        main: 'stub-module'
-    }],
+var dojoConfig = {  // eslint-disable-line no-unused-vars
+    baseUrl: '/src/',
+    packages: ['dojo',  // dojo is required here since we are defining baseUrl before loading dojo
+        {
+            name: 'agrc-jasmine-matchers',
+            location: 'agrc-jasmine-matchers/src'
+        }, {
+            name: 'stubmodule',
+            location: 'stubmodule/src',
+            main: 'stub-module'
+        }
+    ],
     has: {
         'dojo-undef-api': true
     }

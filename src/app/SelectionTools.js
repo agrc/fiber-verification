@@ -1,33 +1,29 @@
 define([
-    'dojo/text!./templates/SelectionTools.html',
+    './config',
 
-    'dojo/_base/declare',
-    'dojo/_base/lang',
-
-    'dojo/query',
-    'dojo/dom-class',
-    'dojo/topic',
-
-    'dijit/_WidgetBase',
     'dijit/_TemplatedMixin',
+    'dijit/_WidgetBase',
     'dijit/_WidgetsInTemplateMixin',
 
-    './config'
-], function(
-    template,
+    'dojo/dom-class',
+    'dojo/query',
+    'dojo/text!./templates/SelectionTools.html',
+    'dojo/topic',
+    'dojo/_base/declare',
+    'dojo/_base/lang'
+], function (
+    config,
 
-    declare,
-    lang,
-
-    query,
-    domClass,
-    topic,
-
-    _WidgetBase,
     _TemplatedMixin,
+    _WidgetBase,
     _WidgetsInTemplateMixin,
 
-    config
+    domClass,
+    query,
+    template,
+    topic,
+    declare,
+    lang
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // description:
@@ -43,7 +39,7 @@ define([
 
         // Properties to be sent into constructor
 
-        postCreate: function() {
+        postCreate: function () {
             // summary:
             //      Overrides method of same name in dijit._Widget.
             // tags:
@@ -54,7 +50,7 @@ define([
 
             this.inherited(arguments);
         },
-        setupConnections: function() {
+        setupConnections: function () {
             // summary:
             //      wire events, and such
             //

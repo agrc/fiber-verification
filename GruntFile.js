@@ -1,32 +1,32 @@
-/* jshint camelcase:false */
-module.exports = function(grunt) {
-    var jsFiles = 'src/app/**/*.js',
-        otherFiles = [
-            'src/app/**/*.html',
-            'src/app/**/*.css',
-            'src/index.html',
-            'src/ChangeLog.html'
-        ],
-        gruntFile = 'GruntFile.js',
-        jshintFiles = [jsFiles, gruntFile],
-        bumpFiles = [
-            'package.json',
-            'bower.json',
-            'src/app/config.js'
-        ],
-        deployFiles = [
-            '**',
-            '!build-report.txt',
-            '!util/**',
-            '!jasmine-favicon-reporter/**',
-            '!**/*.uncompressed.js',
-            '!**/*consoleStripped.js',
-            '!**/tests/**',
-            '!**/bootstrap/test-infra/**',
-            '!**/bootstrap/less/**'
-        ],
-        deployDir = './wwwroot/fiber-verification/',
-        secrets;
+module.exports = function (grunt) {
+    var jsFiles = 'src/app/**/*.js';
+    var otherFiles = [
+        'src/app/**/*.html',
+        'src/app/**/*.css',
+        'src/index.html',
+        'src/ChangeLog.html'
+    ];
+    var gruntFile = 'GruntFile.js';
+    var eslintFiles = [jsFiles, gruntFile];
+    var bumpFiles = [
+        'package.json',
+        'bower.json',
+        'src/app/config.js'
+    ];
+    var deployFiles = [
+        '**',
+        '!build-report.txt',
+        '!util/**',
+        '!jasmine-favicon-reporter/**',
+        '!**/*.uncompressed.js',
+        '!**/*consoleStripped.js',
+        '!**/tests/**',
+        '!**/bootstrap/test-infra/**',
+        '!**/bootstrap/less/**'
+    ];
+    var deployDir = './wwwroot/fiber-verification/';
+    var secrets;
+
     try {
         secrets = grunt.file.readJSON('secrets.json');
     } catch (e) {
@@ -138,10 +138,12 @@ module.exports = function(grunt) {
                 }
             }
         },
-        jshint: {
-            files: jshintFiles,
+        eslint: {
             options: {
-                jshintrc: '.jshintrc'
+                configFile: '.eslintrc'
+            },
+            main: {
+                src: jsFiles
             }
         },
         processhtml: {
@@ -198,12 +200,12 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            jshint: {
-                files: jshintFiles,
-                tasks: ['jshint', 'jasmine:main:build']
+            eslint: {
+                files: eslintFiles,
+                tasks: ['eslint', 'jasmine:main:build']
             },
             src: {
-                files: jshintFiles.concat(otherFiles),
+                files: eslintFiles.concat(otherFiles),
                 options: {
                     livereload: true
                 }
@@ -220,7 +222,7 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', [
-        'jshint',
+        'eslint',
         'amdcheck:main',
         'jasmine:main:build',
         'connect',
@@ -253,7 +255,7 @@ module.exports = function(grunt) {
         'sshexec:stage'
     ]);
     grunt.registerTask('travis', [
-        'jshint',
+        'eslint',
         'connect',
         'jasmine:main'
     ]);

@@ -189,7 +189,7 @@ require([
             'style': 'esriSFSSolid'
         }
     }];
-    describe('app/MapController', function() {
+    describe('app/MapController', function () {
         beforeEach(function () {
             MapController.init({mapDiv: domConstruct.create('div', null, document.body)});
         });

@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var projectUrl;
     if (typeof location === 'object') {
         // running in browser
@@ -30,17 +30,17 @@
         'dijit'
     ];
     require(config, [
-            'ijit/widgets/authentication/UserAdmin',
+        'ijit/widgets/authentication/UserAdmin',
 
-            'dojo/domReady!'
-        ],
+        'dojo/domReady!'
+    ],
 
-        function(
-            UserAdmin
-        ) {
-            new UserAdmin({
-                title: 'Fiber Availability',
-                appName: 'fiberverification'
-            }, 'widget-div');
-        });
-})();
+    function (
+        UserAdmin
+    ) {
+        new UserAdmin({
+            title: 'Fiber Availability',
+            appName: 'fiberverification'
+        }, 'widget-div');
+    });
+}());
