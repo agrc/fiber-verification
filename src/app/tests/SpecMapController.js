@@ -225,8 +225,8 @@ require([
 
                 var comb = MapController.getHoneyComb();
 
-                expect(comb.updates.length).toBe(2);
-                expect(comb.adds.length).toBe(1);
+                expect(comb.updates.length).toBe(0);
+                expect(comb.adds.length).toBe(3);
             });
         });
     });
