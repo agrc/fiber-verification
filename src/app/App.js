@@ -100,7 +100,7 @@ define([
 
             var gnisProvider = new WebAPI(
                 config.apiKey,
-                'SGID10.LOCATION.PlaceNamesGNIS2010',
+                'SGID10.LOCATION.ZoomLocations',
                 'NAME',
                 { wkid: 3857 }
             );
@@ -114,7 +114,7 @@ define([
                 new Sherlock({
                     provider: gnisProvider,
                     map: MapController.map,
-                    placeHolder: 'place name ...',
+                    placeHolder: 'place name, city, zip, etc',
                     maxResultsToDisplay: 10
                 }, this.placesNode),
                 login,
