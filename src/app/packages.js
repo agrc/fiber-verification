@@ -12,6 +12,7 @@ require({
         'layer-selector',
         'moment',
         'put-selector',
+        'sherlock',
         'xstyle',
         {
             name: 'bootstrap',
@@ -42,5 +43,10 @@ require({
             location: './stubmodule',
             main: 'src/stub-module'
         }
-    ]
-}, ['jquery']);
+    ],
+    map: {
+        'sherlock': {
+            'spinjs': 'spin'
+        }
+    }
+});

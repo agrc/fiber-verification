@@ -1,26 +1,36 @@
 /* jshint maxlen:false */
 define([
     'dojo/has',
+    'dojo/request/xhr',
 
     'esri/config'
 ], function (
     has,
+    xhr,
 
     esriConfig
 ) {
     var apiKey;
+    var quadWord;
     var ownerName = 'FIBERADMIN';
     if (has('agrc-api-key') === 'prod') {
-        // mapserv.utah.gov
-        // apiKey = 'AGRC-E7FEB434755864';
         // fiberediting.mapserv.utah.gov
         apiKey = 'AGRC-B8627CDB199733';
+        quadWord = 'kayak-cantina-freddie-cover';
     } else if (has('agrc-api-key') === 'stage') {
         // test.mapserv.utah.gov
         apiKey = 'AGRC-FFCDAD6B933051';
+        quadWord = 'opera-event-little-pinball';
     } else {
-        // localhost
-        apiKey = 'AGRC-B5D62BD2151902';
+        xhr(require.baseUrl + 'secrets.json', {
+            handleAs: 'json',
+            sync: true
+        }).then(function (secrets) {
+            quadWord = secrets.quadWord;
+            apiKey = secrets.apiKey;
+        }, function () {
+            throw 'Error getting secrets!';
+        });
     }
     var colors = {
         transparent: [0, 0, 0, 0],
@@ -42,7 +52,7 @@ define([
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
 
-    window.AGRC = {
+    return {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
 
@@ -57,6 +67,8 @@ define([
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
         apiKey: apiKey, // acquire at developer.mapserv.utah.gov
+
+        quadWord: quadWord,
 
         user: null, // to be populated after successful sign in
 
@@ -224,7 +236,4 @@ define([
             }
         }
     };
-
-
-    return window.AGRC;
 });

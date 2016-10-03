@@ -2,7 +2,6 @@ define([
     './config',
 
     'agrc/widgets/map/BaseMap',
-    'agrc/widgets/map/BaseMapSelector',
 
     'dojo/dom-construct',
     'dojo/string',
@@ -10,6 +9,7 @@ define([
     'dojo/_base/array',
     'dojo/_base/lang',
 
+    'esri/geometry/Extent',
     'esri/graphic',
     'esri/layers/ArcGISDynamicMapServiceLayer',
     'esri/layers/ArcGISTiledMapServiceLayer',
@@ -20,12 +20,13 @@ define([
     'esri/layers/TableDataSource',
     'esri/SpatialReference',
     'esri/tasks/query',
-    'esri/toolbars/draw'
+    'esri/toolbars/draw',
+
+    'layer-selector/LayerSelector'
 ], function (
     config,
 
     BaseMap,
-    BaseMapSelector,
 
     domConstruct,
     dojoString,
@@ -33,6 +34,7 @@ define([
     array,
     lang,
 
+    Extent,
     Graphic,
     ArcGISDynamicMapServiceLayer,
     ArcGISTiledMapServiceLayer,
@@ -43,7 +45,9 @@ define([
     TableDataSource,
     SpatialReference,
     Query,
-    Draw
+    Draw,
+
+    LayerSelector
 ) {
     return {
         // description:
@@ -97,6 +101,15 @@ define([
 
             this.map = new BaseMap(this.mapDiv, {
                 useDefaultBaseMap: false,
+                extent: new Extent({
+                    xmax: -11762120.612131765,
+                    xmin: -13074391.513731329,
+                    ymax: 5225035.106177688,
+                    ymin: 4373832.359194187,
+                    spatialReference: {
+                        wkid: 3857
+                    }
+                }),
                 showAttribution: false
             });
             this.handles.push(
@@ -105,11 +118,10 @@ define([
             config.map = this.map;
 
             this.childWidgets.push(
-                new BaseMapSelector({
+                new LayerSelector({
                     map: this.map,
-                    id: 'claro',
-                    position: 'TR',
-                    defaultThemeLabel: 'Lite'
+                    quadWord: config.quadWord,
+                    baseLayers: ['Hybrid', 'Lite', 'Terrain', 'Topo']
                 })
             );
 

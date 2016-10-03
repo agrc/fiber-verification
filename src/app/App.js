@@ -6,7 +6,6 @@ define([
     './SelectionTools',
 
     'agrc/widgets/locate/FindAddress',
-    'agrc/widgets/locate/MagicZoom',
 
     'dijit/_TemplatedMixin',
     'dijit/_WidgetBase',
@@ -19,7 +18,8 @@ define([
 
     'ijit/widgets/authentication/LoginRegister',
 
-    'bootstrap'
+    'sherlock/providers/WebAPI',
+    'sherlock/Sherlock'
 ], function (
     config,
     mapLayers,
@@ -28,7 +28,6 @@ define([
     SelectionTools,
 
     FindAddress,
-    MagicZoom,
 
     _TemplatedMixin,
     _WidgetBase,
@@ -39,7 +38,10 @@ define([
     array,
     declare,
 
-    LoginRegister
+    LoginRegister,
+
+    WebAPI,
+    Sherlock
 ) {
     return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
         // summary:
@@ -96,17 +98,23 @@ define([
             });
             MapController.startup();
 
+            var gnisProvider = new WebAPI(
+                config.apiKey,
+                'SGID10.LOCATION.PlaceNamesGNIS2010',
+                'NAME',
+                { wkid: 3857 }
+            );
+
             this.childWidgets.push(
                 new FindAddress({
                     map: MapController.map,
-                    apiKey: config.apiKey
+                    apiKey: config.apiKey,
+                    zoomLevel: 17
                 }, this.geocodeNode),
-                new MagicZoom({
+                new Sherlock({
+                    provider: gnisProvider,
                     map: MapController.map,
-                    mapServiceURL: config.urls.vector,
-                    searchLayerIndex: 4,
-                    searchField: 'NAME',
-                    placeHolder: 'place name...',
+                    placeHolder: 'place name ...',
                     maxResultsToDisplay: 10
                 }, this.placesNode),
                 login,

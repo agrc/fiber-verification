@@ -33,6 +33,7 @@ src/layer-selector/
 src/moment/
 src/mustache/
 src/put-selector/
+src/sherlock/
 src/spin.js/
 src/spinjs
 src/stubmodule/

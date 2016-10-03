@@ -1,12 +1,12 @@
-@import'../../dijit/themes/claro/claro.css';
-@import'../../esri/css/esri.css';
-@import'../../agrc/resources/map/BaseMap.css';
-@import'../../agrc/resources/map/BaseMapSelector.css';
-@import'../../agrc/resources/locate/FindAddress.css';
-@import'../../agrc/resources/locate/MagicZoom.css';
-@import'../../ijit/resources/authentication/LoginRegister.css'; 
-@import'SelectionTools.css';
-@import'Editor.css';
+@import '../../dijit/themes/claro/claro.css';
+@import '../../esri/css/esri.css';
+@import '../../agrc/resources/map/BaseMap.css';
+@import '../../layer-selector/resources/LayerSelector.css';
+@import '../../agrc/resources/locate/FindAddress.css';
+@import '../../sherlock/resources/Sherlock.css';
+@import '../../ijit/resources/authentication/LoginRegister.css';
+@import 'SelectionTools.css';
+@import 'Editor.css';
 
 body, html, .app {
     width: 100%;
@@ -18,7 +18,7 @@ body, html, .app {
 }
 /* NAVBAR */
 .app .navbar {
-    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=97)";
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=97)";
     filter: alpha(opacity=90);
     opacity: 0.90
 }
@@ -34,17 +34,25 @@ body, html, .app {
     vertical-align: sub
 }
 .app .navbar-nav > .dropdown > .dropdown-menu {
-    padding: 15px
+    padding: 15px;
+    width: 260px;
 }
 .app .dropdown-menu .control-group {
     margin: 0
 }
-/* Controls */ 
+.app .sherlock {
+    width: 100%;
+    padding: 0;
+}
+.app .sherlock .input-group {
+    width: 100%;
+}
+/* Controls */
 .app .esriSimpleSlider {
     top: 60px
 }
-.agrc.TR .selectorMain {
-    top: 60px
+.app .map .layer-selector {
+    top: 40px
 }
 /* CENTER (MAP) */
 .app .center-container {
