@@ -1,0 +1,16 @@
+{
+    "application": {
+        "name": "fiberverification",
+        "description": "The Fiber Availability Online Web App",
+        "baseUrl": "https://fiberediting.mapserv.utah.gov/",
+        "adminPage": "user_admin.html"
+    },
+    "adminEmails": [
+        "stdavis@utah.gov"
+    ],
+    "roles": [
+        "admin",
+        "editor"
+    ],
+    "creationToken": "super_token"
+}
