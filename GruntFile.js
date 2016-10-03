@@ -11,7 +11,8 @@ module.exports = function (grunt) {
     var bumpFiles = [
         'package.json',
         'bower.json',
-        'src/app/config.js'
+        'src/app/config.js',
+        'src/app/package.json'
     ];
     var deployFiles = [
         '**',
@@ -57,7 +58,7 @@ module.exports = function (grunt) {
         bump: {
             options: {
                 files: bumpFiles,
-                commitFiles: bumpFiles,
+                commitFiles: bumpFiles.concat(['src/ChangeLog.html']),
                 push: false
             }
         },
