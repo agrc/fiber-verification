@@ -1,21 +1,18 @@
 /* jshint maxlen:false */
 define(['dojo/has'], function (has) {
     var apiKey;
-    var ownerName;
+    var ownerName = 'FIBERADMIN';
     if (has('agrc-api-key') === 'prod') {
         // mapserv.utah.gov
         // apiKey = 'AGRC-E7FEB434755864';
         // fiberediting.mapserv.utah.gov
         apiKey = 'AGRC-B8627CDB199733';
-        ownerName = 'FIBERADMIN';
     } else if (has('agrc-api-key') === 'stage') {
         // test.mapserv.utah.gov
         apiKey = 'AGRC-FFCDAD6B933051';
-        ownerName = 'FIBERADMIN';
     } else {
         // localhost
         apiKey = 'AGRC-B5D62BD2151902';
-        ownerName = 'DBO';
     }
     var colors = {
         transparent: [0, 0, 0, 0],
