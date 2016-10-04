@@ -1,35 +1,49 @@
 /*eslint-disable no-unused-vars*/
-
-// Useful for tagging packages such as proj4 as AMD
-// to help the build system work with them better.
-var amdTag = function (filename) {
-    return (/.*\.js$/).test(filename);
-};
-
 var profile = {
     basePath: '../src',
     action: 'release',
     cssOptimize: 'comments',
     mini: true,
-    optimize: 'closure',
-    layerOptimize: 'closure',
-    stripConsole: 'all',
+    optimize: 'uglify',
+    layerOptimize: 'uglify',
     selectorEngine: 'acme',
     layers: {
         'dojo/dojo': {
             include: [
                 'dojo/i18n',
                 'dojo/domReady',
+                'app/packages',
                 'app/run',
+                'app/App',
+                'dojox/gfx/filters',
                 'dojox/gfx/path',
                 'dojox/gfx/svg',
-                'dojox/gfx/shape'
+                'dojox/gfx/svgext',
+                'dojox/gfx/shape',
+                'ladda/dist/spin'
             ],
             includeLocales: ['en-us'],
             customBase: true,
             boot: true
+        },
+        'ijit/widgets/authentication/UserAdmin': {
+            exclude: ['dojo/dojo']
         }
     },
+    packages: [{
+        name: 'moment',
+        location: 'moment',
+        main: 'moment',
+        trees: [
+          // don't bother with .hidden, tests, min, src, and templates
+          ['.', '.', /(\/\.)|(~$)|(test|txt|src|min|templates)/]
+        ],
+        resourceTags: {
+            amd: function (filename, mid) {
+                return /\.js$/.test(filename);
+            }
+        }
+    }],
     staticHasFeatures: {
         // The trace & log APIs are used for debugging the loader, so we don’t need them in the build
         'dojo-trace-api': 0,
@@ -47,12 +61,7 @@ var profile = {
         // We aren’t loading tests in production
         'dojo-test-sniff': 0
     },
-    packages: [{
-        name: 'esri',
-        resourceTags: amdTag
-    }, 'dgrid', 'mustache', 'xstyle', 'put-selector'],
-    // this is to make sure that the widget templates get built into the layer file.
     userConfig: {
-        packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri', 'layer-selector']
+        packages: ['app', 'dijit', 'dojox', 'agrc', 'ijit', 'esri', 'layer-selector', 'sherlock']
     }
 };

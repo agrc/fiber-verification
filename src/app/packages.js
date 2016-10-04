@@ -47,6 +47,9 @@ require({
     map: {
         'sherlock': {
             'spinjs': 'spin'
+        },
+        'ladda': {
+            'spin': 'ladda/dist/spin'
         }
     }
 });

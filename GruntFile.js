@@ -91,22 +91,19 @@ module.exports = function (grunt) {
         dojo: {
             prod: {
                 options: {
-                    // You can also specify options to be used in all your tasks
                     profiles: ['profiles/prod.build.profile.js', 'profiles/build.profile.js'] // Profile for build
                 }
             },
             stage: {
                 options: {
-                    // You can also specify options to be used in all your tasks
                     profiles: ['profiles/stage.build.profile.js', 'profiles/build.profile.js'] // Profile for build
                 }
             },
             options: {
-                // You can also specify options to be used in all your tasks
-                dojo: 'src/dojo/dojo.js', // Path to dojo.js file in dojo source
-                load: 'build', // Optional: Utility to bootstrap (Default: 'build')
+                dojo: 'src/dojo/dojo.js',
+                load: 'build',
                 releaseDir: '../dist',
-                require: 'src/app/run.js', // Optional: Module to require for the build (Default: nothing)
+                requires: ['src/app/packages.js', 'src/app/run.js'],
                 basePath: './src'
             }
         },
@@ -234,15 +231,15 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('build-prod', [
         'clean:build',
-        'dojo:prod',
         'newer:imagemin:main',
+        'dojo:prod',
         'copy:main',
         'processhtml:main'
     ]);
     grunt.registerTask('build-stage', [
         'clean:build',
-        'dojo:stage',
         'newer:imagemin:main',
+        'dojo:stage',
         'copy:main',
         'processhtml:main'
     ]);

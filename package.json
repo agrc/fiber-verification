@@ -16,7 +16,8 @@
     "grunt-eslint": "^19.0.0",
     "grunt-newer": "^1.2.0",
     "grunt-processhtml": "^0.4.1",
-    "grunt-ssh": "^0.12.9"
+    "grunt-ssh": "^0.12.9",
+    "uglify": "^0.1.5"
   },
   "scripts": {
     "test": "grunt travis --verbose"
