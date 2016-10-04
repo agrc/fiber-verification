@@ -15,14 +15,17 @@ require(['dojo/domReady!'], function () {
             };
 
             var check = function () {
-                console.log('require.waiting', require.waiting);
                 if (hasProps(require.waiting)) {
                     // Keep checking until jasmine default timeout.
                     // xstyle/css seems to make this take an extra few milliseconds.
                     if (tries < maxTries) {
                         window.setTimeout(check, pause);
                     } else {
-                        expect(require.waiting).toEqual({});
+                        for (var prop in require.waiting) {
+                            if (require.waiting.hasOwnProperty(prop)) {
+                                expect(prop).toMatch(/dojo\/text!.*!src\/secrets\.json/);
+                            }
+                        }
                         done();
                     }
                     tries = tries + 1;

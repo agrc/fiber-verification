@@ -1,37 +1,14 @@
 /* jshint maxlen:false */
 define([
     'dojo/has',
-    'dojo/request/xhr',
 
     'esri/config'
 ], function (
     has,
-    xhr,
 
     esriConfig
 ) {
-    var apiKey;
-    var quadWord;
     var ownerName = 'FIBERADMIN';
-    if (has('agrc-api-key') === 'prod') {
-        // fiberediting.mapserv.utah.gov
-        apiKey = 'AGRC-B8627CDB199733';
-        quadWord = 'kayak-cantina-freddie-cover';
-    } else if (has('agrc-api-key') === 'stage') {
-        // test.mapserv.utah.gov
-        apiKey = 'AGRC-FFCDAD6B933051';
-        quadWord = 'opera-event-little-pinball';
-    } else {
-        xhr(require.baseUrl + 'secrets.json', {
-            handleAs: 'json',
-            sync: true
-        }).then(function (secrets) {
-            quadWord = secrets.quadWord;
-            apiKey = secrets.apiKey;
-        }, function () {
-            throw 'Error getting secrets!';
-        });
-    }
     var colors = {
         transparent: [0, 0, 0, 0],
         white: [0, 0, 0, 255],
@@ -52,7 +29,7 @@ define([
     // e.g. http://mapserv.utah.gov/ArcGIS/rest/info?f=json
     esriConfig.defaults.io.corsEnabledServers.push('mapserv.utah.gov');
 
-    return {
+    var config = {
         // errorLogger: ijit.modules.ErrorLogger
         errorLogger: null,
 
@@ -66,9 +43,9 @@ define([
 
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
-        apiKey: apiKey, // acquire at developer.mapserv.utah.gov
+        apiKey: null, // acquire at developer.mapserv.utah.gov
 
-        quadWord: quadWord,
+        quadWord: null,
 
         user: null, // to be populated after successful sign in
 
@@ -236,4 +213,26 @@ define([
             }
         }
     };
+
+    if (has('agrc-api-key') === 'prod') {
+        // fiberediting.mapserv.utah.gov
+        config.apiKey = 'AGRC-B8627CDB199733';
+        config.quadWord = 'kayak-cantina-freddie-cover';
+    } else if (has('agrc-api-key') === 'stage') {
+        // test.mapserv.utah.gov
+        config.apiKey = 'AGRC-FFCDAD6B933051';
+        config.quadWord = 'opera-event-little-pinball';
+    } else {
+        try {
+            require(['dojo/text!src/secrets.json'], function (secretsJSON) {
+                var secrets = JSON.parse(secretsJSON);
+                config.quadWord = secrets.quadWord;
+                config.apiKey = secrets.apiKey;
+            });
+        } catch (error) {
+            // swallow
+        }
+    }
+
+    return config;
 });
