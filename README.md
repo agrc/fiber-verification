@@ -9,7 +9,7 @@ Boilerplated original from [AGRCJavaScriptBoilerplate](https://github.com/agrc/A
 
 
 [test site](http://test.mapserv.utah.gov/fiberavailabilitymap/)  
-[production site](https://fiberediting.mapserv.utah.gov/map/)
+[production site](https://fiberediting.mapserv.utah.gov/)
 
 
 ## Deployment
